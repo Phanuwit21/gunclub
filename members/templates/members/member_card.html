@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <title>Member Card</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        .card-container {
+            perspective: 1000px;
+        }
+        .card {
+            width: 380px;
+            height: 230px;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.8s;
+            cursor: pointer;
+        }
+        .card.flipped {
+            transform: rotateY(180deg);
+        }
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 1rem;
+        }
+        .card-back {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+<div class="card-container" onclick="this.querySelector('.card').classList.toggle('flipped')">
+    <div class="card shadow-xl">
+
+        <!-- ================= FRONT ================= -->
+        <div class="card-face bg-white p-4 flex gap-4">
+
+            <!-- Photo -->
+            <div>
+                {% if member.photo %}
+                    <img src="{{ member.photo.url }}"
+                         class="w-24 h-32 object-cover rounded-lg border">
+                {% else %}
+                    <div class="w-24 h-32 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-500">
+                        No Photo
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Info -->
+            <div class="flex-1 text-sm">
+                <div class="font-bold text-base">
+                    {{ member.first_name }} {{ member.last_name }}
+                </div>
+                <div class="text-gray-500 text-xs">
+                    {{ member.first_name_en }} {{ member.last_name_en }}
+                </div>
+
+                <div class="mt-1 text-xs">
+                    Nickname: <span class="font-medium">{{ member.nickname }}</span>
+                </div>
+
+                <div class="mt-2 text-xs">
+                    Member ID:
+                    <span class="font-mono font-semibold">{{ member.member_id }}</span>
+                </div>
+
+                <div class="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
+                    <div>
+                        Status:
+                        {% if member.expire_date >= today %}
+                            <span class="text-green-600 font-semibold">Active</span>
+                        {% else %}
+                            <span class="text-red-600 font-semibold">Expired</span>
+                        {% endif %}
+                    </div>
+                    <div>Blood: {{ member.blood_group }}</div>
+                    <div>Joined: {{ member.join_date }}</div>
+                    <div>Expire: {{ member.expire_date }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= BACK ================= -->
+        <div class="card-face card-back bg-gray-900 text-white p-4 flex flex-col justify-between">
+
+            <div class="text-center text-sm">
+                <div class="font-semibold">Gun Club Membership Card</div>
+                <div class="text-xs text-gray-300 mt-1">
+                    If found, please return to
+                </div>
+                <div class="font-medium mt-1">
+                    Gun Club Thailand
+                </div>
+                <div class="text-xs text-gray-300">
+                    Contact: {{ member.phone }}
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <img src="{{ member.qr_code.url }}" class="w-24 h-24 bg-white p-1 rounded">
+            </div>
+
+            <div class="text-[10px] text-gray-400 text-center">
+                This card is the property of Gun Club.  
+                Misuse is prohibited.
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

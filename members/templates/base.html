@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gun Club System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100">
+
+<div class="flex min-h-screen">
+
+    <!-- SIDEBAR -->
+    <div class="w-64 bg-slate-900 text-white p-5">
+
+        <div class="text-xl font-bold mb-8">
+            Gun Club
+        </div>
+
+        <nav class="space-y-2 text-sm">
+
+            <!-- DASHBOARD -->
+            <a href="{% url 'staff_dashboard' %}"
+               class="block px-3 py-2 rounded
+               {% if request.resolver_match.url_name == 'staff_dashboard' %}
+                   bg-slate-700
+               {% else %}
+                   hover:bg-slate-700
+               {% endif %}">
+                Dashboard
+            </a>
+
+            <!-- MEMBERS -->
+            <a href="{% url 'member_list' %}"
+               class="block px-3 py-2 rounded
+               {% if request.resolver_match.url_name == 'member_list' %}
+                   bg-slate-700
+               {% else %}
+                   hover:bg-slate-700
+               {% endif %}">
+                Members
+            </a>
+
+            <!-- ADD MEMBER -->
+            <a href="{% url 'add_member' %}"
+               class="block px-3 py-2 rounded
+               {% if request.resolver_match.url_name == 'add_member' %}
+                   bg-slate-700
+               {% else %}
+                   hover:bg-slate-700
+               {% endif %}">
+                Add Member
+            </a>
+
+            <hr class="border-slate-700 my-3">
+
+            <!-- MY CARD -->
+            <a href="{% url 'my_card' %}"
+                class="block px-3 py-2 rounded hover:bg-slate-700">
+                My Card
+            </a>
+
+
+            <!-- LOGOUT -->
+            <a href="{% url 'staff_logout' %}"
+               class="block px-3 py-2 rounded hover:bg-red-600">
+                Logout
+            </a>
+
+        </nav>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="flex-1 p-8">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+</div>
+
+</body>
+</html>

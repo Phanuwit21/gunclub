@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Members</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="max-w-5xl mx-auto mt-10 bg-white shadow rounded p-6">
+    <h1 class="text-2xl font-bold mb-4">Member List</h1>
+        <form method="GET" class="mb-4">
+            <input
+                type="text"
+                name="q"
+                placeholder="Search member..."
+                class="border px-3 py-2 rounded-lg w-64"
+            >
+                <button class="bg-blue-900 text-white px-4 py-2 rounded-lg">Search</button>
+        </form>
+
+
+    <table class="w-full border">
+        <thead class="bg-gray-200">
+            <tr>
+                <th class="p-2">Member ID</th>
+                <th class="p-2">Full Name</th>
+                <th class="p-2">NickName</th>
+                <th class="p-2">Join</th>
+                <th class="p-2">Expire</th>
+                <th class="p-2">Status</th>
+                <th class="p-2">Card</th>
+                <th class="p-2">Edit</th>
+                <th class="p-2">Delete</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for m in members %}
+            <tr class="border-t text-center">
+                <td class="p-2">{{ m.member_id }}</td>
+                <td class="p-2">{{ m.first_name }} {{ m.last_name}}</td>
+                <td class="p-2">{{ m.nickname }}</td>
+                <td class="p-2">{{ m.join_date }}</td>
+                <td class="p-2">{{ m.expire_date }}</td>
+                <td class="p-2">{% if m.status == "Active" %}<span class="text-green-600 font-bold">Active</span>{% else %}<span class="text-red-500 font-bold">Expired</span>{% endif %}</td>
+                <td class="p-2"><a href="/member/{{ m.public_id }}/" class="text-blue-600">View</a></td>
+                <td class="p-2"><a href="/edit/{{ m.member_id }}/" class="text-blue-600">Edit</a></td>
+                <td class="p-2"><a href="/delete/{{ m.member_id }}/" class="text-red-600">Delete</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>
+
+{% endblock %}

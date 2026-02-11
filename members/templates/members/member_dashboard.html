@@ -1,0 +1,52 @@
+{% extends "base_member.html" %}
+
+{% block content %}
+
+<h1 class="text-2xl font-bold mb-6">Member Dashboard</h1>
+
+<div class="bg-white p-6 rounded-xl shadow flex items-center gap-6">
+
+    {% if member.photo %}
+        <img src="{{ member.photo.url }}"
+             class="w-24 h-24 rounded-full object-cover">
+    {% endif %}
+
+    <div>
+        <div class="text-xl font-bold">
+            {{ member.first_name }} {{ member.last_name }}
+        </div>
+
+        <div class="text-gray-500">
+            Member ID: {{ member.member_id }}
+        </div>
+
+        <div class="text-gray-500">
+            Role: {{ member.get_role_display }}
+        </div>
+
+        <div class="mt-2">
+            {% if member.expire_date %}
+                <span class="text-sm text-gray-600">
+                    Expire: {{ member.expire_date }}
+                </span>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+
+<div class="mt-6 flex gap-4">
+
+    <a href="{% url 'my_card' %}"
+       class="bg-blue-900 text-white px-6 py-3 rounded-lg shadow">
+        View Card
+    </a>
+
+    <a href="{% url 'edit_profile' %}"
+       class="bg-gray-700 text-white px-6 py-3 rounded-lg shadow">
+        Edit Profile
+    </a>
+
+</div>
+
+{% endblock %}

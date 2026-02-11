@@ -1,0 +1,21 @@
+{% if is_staff_side %}
+    {% extends "base.html" %}
+{% else %}
+    {% extends "base_member.html" %}
+{% endif %}
+
+{% block content %}
+
+<h1 class="text-2xl font-bold mb-6">Edit Profile</h1>
+
+<form method="POST" enctype="multipart/form-data"
+      class="bg-white p-6 rounded-xl shadow max-w-lg">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button class="bg-blue-900 text-white px-4 py-2 rounded mt-3">
+        Save
+    </button>
+</form>
+
+{% endblock %}

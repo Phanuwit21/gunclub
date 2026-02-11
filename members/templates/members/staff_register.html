@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h2>Create Staff Account</h2>
+
+<form method="post">
+  {% csrf_token %}
+  <input name="username" placeholder="username">
+  <input name="password" type="password" placeholder="password">
+  <button type="submit">Create</button>
+</form>
+
+</body>
+</html>
+
+{% endblock %}

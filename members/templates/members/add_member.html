@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Member</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-slate-100 min-h-screen">
+
+
+<!-- FORM CARD -->
+<div class="max-w-3xl mx-auto mt-10 bg-white rounded-2xl shadow-lg p-8">
+    
+
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">
+        Add New Member
+    </h1>
+
+    <form method="POST" enctype="multipart/form-data" class="space-y-5">
+        {% csrf_token %}
+
+        <!-- NAME -->
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">First Name</label>
+                {{ form.first_name }}
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Last Name</label>
+                {{ form.last_name }}
+            </div>
+        </div>
+
+        <!-- NICKNAME -->
+        <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Nickname</label>
+            {{ form.nickname }}
+        </div>
+
+        <!-- ROLE -->
+        <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Role</label>
+            {{ form.role }}
+        </div>
+
+        <!-- DATES -->
+        <div class="grid grid-cols-2 gap-4">
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Join Date</label>
+                {{ form.join_date }}
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-600 mb-1">Expire Date</label>
+                {{ form.expire_date }}
+            </div>
+        </div>
+
+        <!-- PHOTO -->
+        <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">Photo</label>
+            {{ form.photo }}
+        </div>
+
+        <!-- ACTIVE -->
+        <div class="flex items-center gap-2">
+            {{ form.is_active }}
+            <label class="text-sm text-gray-700">Active Member</label>
+        </div>
+
+        <!-- BUTTON -->
+        <div class="pt-4">
+            <button
+                class="bg-blue-900 hover:bg-blue-800 text-white px-6 py-2 rounded-lg shadow"
+            >
+                Save Member
+            </button>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>
+
+{% endblock %}

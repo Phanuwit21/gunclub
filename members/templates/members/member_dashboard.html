@@ -1,52 +1,43 @@
 {% extends "base_member.html" %}
-
+{% block title %}แดชบอร์ดของฉัน — Gun Club{% endblock %}
 {% block content %}
 
-<h1 class="text-2xl font-bold mb-6">Member Dashboard</h1>
+<h1 class="text-2xl sm:text-3xl font-bold mb-6 text-slate-800">แดชบอร์ดของฉัน</h1>
 
-<div class="bg-white p-6 rounded-xl shadow flex items-center gap-6">
-
+<div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100 flex flex-col sm:flex-row items-center sm:items-start gap-5 sm:gap-6">
     {% if member.photo %}
         <img src="{{ member.photo.url }}"
-             class="w-24 h-24 rounded-full object-cover">
+             class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md flex-shrink-0">
+    {% else %}
+        <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-slate-200 flex items-center justify-center text-slate-500 text-2xl font-bold flex-shrink-0">
+            {{ member.first_name|slice:":1" }}{{ member.last_name|slice:":1" }}
+        </div>
     {% endif %}
 
-    <div>
-        <div class="text-xl font-bold">
+    <div class="flex-1 text-center sm:text-left">
+        <div class="text-xl sm:text-2xl font-bold text-slate-800">
             {{ member.first_name }} {{ member.last_name }}
         </div>
-
-        <div class="text-gray-500">
-            Member ID: {{ member.member_id }}
+        <div class="text-slate-500 mt-1 font-mono">{{ member.member_id }}</div>
+        <div class="inline-flex mt-2 px-3 py-1 rounded-full text-sm font-medium
+            {% if member.status == 'Active' %}bg-emerald-100 text-emerald-700{% else %}bg-red-100 text-red-700{% endif %}">
+            {{ member.status }}
         </div>
-
-        <div class="text-gray-500">
-            Role: {{ member.get_role_display }}
-        </div>
-
-        <div class="mt-2">
-            {% if member.expire_date %}
-                <span class="text-sm text-gray-600">
-                    Expire: {{ member.expire_date }}
-                </span>
-            {% endif %}
-        </div>
+        {% if member.expire_date %}
+        <div class="text-sm text-slate-500 mt-2">หมดอายุ: {{ member.expire_date }}</div>
+        {% endif %}
     </div>
-
 </div>
 
-<div class="mt-6 flex gap-4">
-
+<div class="mt-6 flex flex-col sm:flex-row gap-3 sm:gap-4">
     <a href="{% url 'my_card' %}"
-       class="bg-blue-900 text-white px-6 py-3 rounded-lg shadow">
-        View Card
+       class="flex-1 sm:flex-initial bg-amber-600 hover:bg-amber-700 text-white font-medium px-6 py-3 rounded-xl shadow-sm text-center transition active:scale-[0.98]">
+        ดูบัตรของฉัน
     </a>
-
     <a href="{% url 'edit_profile' %}"
-       class="bg-gray-700 text-white px-6 py-3 rounded-lg shadow">
-        Edit Profile
+       class="flex-1 sm:flex-initial bg-slate-600 hover:bg-slate-700 text-white font-medium px-6 py-3 rounded-xl shadow-sm text-center transition active:scale-[0.98]">
+        แก้ไขโปรไฟล์
     </a>
-
 </div>
 
 {% endblock %}

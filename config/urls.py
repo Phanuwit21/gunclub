@@ -25,6 +25,7 @@ urlpatterns = [
 
     path("", views.staff_login, name="home"),
     path("", include("members.urls")),
+    path("accounts/", include("django.contrib.auth.urls")),
 ]
 
 if settings.DEBUG:

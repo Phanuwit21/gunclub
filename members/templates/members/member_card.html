@@ -2,24 +2,31 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <title>Member Card</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0f172a">
+    <title>บัตรสมาชิก — {{ member.member_id }}</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        .card-container {
-            perspective: 1000px;
-        }
+        body { font-family: 'Sarabun', sans-serif; }
+
+        .card-container { perspective: 1000px; }
+
         .card {
-            width: 380px;
+            width: min(380px, calc(100vw - 2rem));
             height: 230px;
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.8s;
             cursor: pointer;
         }
-        .card.flipped {
-            transform: rotateY(180deg);
-        }
+
+        .card.flipped { transform: rotateY(180deg); }
+
         .card-face {
             position: absolute;
             width: 100%;
@@ -27,94 +34,169 @@
             backface-visibility: hidden;
             border-radius: 1rem;
         }
-        .card-back {
-            transform: rotateY(180deg);
-        }
+
+        .card-back { transform: rotateY(180deg); }
     </style>
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+<body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
 
-<div class="card-container" onclick="this.querySelector('.card').classList.toggle('flipped')">
-    <div class="card shadow-xl">
+{% if request.user.is_authenticated %}
+<div class="w-full max-w-sm mb-4">
+    <a href="{% url 'staff_dashboard' %}"
+       class="text-sm text-blue-600 underline">
+        ← กลับไปหน้า Dashboard
+    </a>
+</div>
+{% endif %}
+
+<div class="card-container w-full max-w-sm flex justify-center"
+     onclick="this.querySelector('.card').classList.toggle('flipped')">
+
+    <div class="card shadow-xl rounded-2xl bg-transparent">
 
         <!-- ================= FRONT ================= -->
-        <div class="card-face bg-white p-4 flex gap-4">
+        <div class="card-face bg-white rounded-2xl overflow-hidden flex flex-col">
 
-            <!-- Photo -->
-            <div>
-                {% if member.photo %}
-                    <img src="{{ member.photo.url }}"
-                         class="w-24 h-32 object-cover rounded-lg border">
+            <!-- แถบสีตาม role -->
+            <div class="h-8
+                {% if member.role == 'PRESIDENT' %}
+                    bg-gradient-to-r from-red-600 to-amber-500
+                {% elif member.role == 'COMMITTEE' %}
+                    bg-gradient-to-r from-purple-600 to-indigo-500
+                {% elif member.role == 'STAFF' %}
+                    bg-gradient-to-r from-emerald-600 to-teal-500
                 {% else %}
-                    <div class="w-24 h-32 bg-gray-200 rounded-lg flex items-center justify-center text-xs text-gray-500">
-                        No Photo
-                    </div>
+                    bg-gradient-to-r from-sky-600 to-blue-500
                 {% endif %}
+                flex items-center justify-between px-3 text-[11px] text-white">
+
+                <span class="font-semibold tracking-wide">
+                    GUN CLUB MEMBERSHIP
+                </span>
+
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold
+                    {% if member.role == 'PRESIDENT' %}
+                        bg-red-600
+                    {% elif member.role == 'COMMITTEE' %}
+                        bg-purple-600
+                    {% elif member.role == 'STAFF' %}
+                        bg-emerald-600
+                    {% else %}
+                        bg-sky-600
+                    {% endif %}
+                ">
+                    {{ member.get_role_display }}
+                </span>
             </div>
 
-            <!-- Info -->
-            <div class="flex-1 text-sm">
-                <div class="font-bold text-base">
-                    {{ member.first_name }} {{ member.last_name }}
-                </div>
-                <div class="text-gray-500 text-xs">
-                    {{ member.first_name_en }} {{ member.last_name_en }}
+            <!-- Content -->
+            <div class="flex-1 flex p-3 gap-3">
+
+                <!-- Photo -->
+                <div class="flex-shrink-0">
+                    {% if member.photo %}
+                        <img src="{{ member.photo.url }}"
+                             class="w-20 h-28 sm:w-24 sm:h-32 object-cover rounded-xl border border-slate-200"
+                             alt="รูปสมาชิก">
+                    {% else %}
+                        <div class="w-20 h-28 sm:w-24 sm:h-32 bg-slate-200 rounded-xl flex items-center justify-center text-xs text-slate-500">
+                            No Photo
+                        </div>
+                    {% endif %}
                 </div>
 
-                <div class="mt-1 text-xs">
-                    Nickname: <span class="font-medium">{{ member.nickname }}</span>
-                </div>
+                <!-- Info -->
+                <div class="flex-1 min-w-0 text-[11px] leading-snug">
 
-                <div class="mt-2 text-xs">
-                    Member ID:
-                    <span class="font-mono font-semibold">{{ member.member_id }}</span>
-                </div>
-
-                <div class="mt-2 grid grid-cols-2 gap-x-2 gap-y-1 text-xs">
-                    <div>
-                        Status:
-                        {% if member.expire_date >= today %}
-                            <span class="text-green-600 font-semibold">Active</span>
-                        {% else %}
-                            <span class="text-red-600 font-semibold">Expired</span>
-                        {% endif %}
+                    <div class="font-bold text-sm truncate">
+                        {{ member.first_name }} {{ member.last_name }}
                     </div>
-                    <div>Blood: {{ member.blood_group }}</div>
-                    <div>Joined: {{ member.join_date }}</div>
-                    <div>Expire: {{ member.expire_date }}</div>
+
+                    <div class="text-slate-500 text-[10px] truncate">
+                        {{ member.first_name_en }} {{ member.last_name_en }}
+                    </div>
+
+                    <div class="mt-1">
+                        ชื่อเล่น:
+                        <span class="font-medium">
+                            {{ member.nickname|default:"—" }}
+                        </span>
+                    </div>
+
+                    <div class="mt-1 font-mono font-semibold text-[11px]">
+                        ID: {{ member.member_id }}
+                    </div>
+
+                    <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">
+                        <div>
+                            สถานะ:
+                            {% if member.expire_date >= today %}
+                                <span class="text-emerald-600 font-semibold">
+                                    Active
+                                </span>
+                            {% else %}
+                                <span class="text-red-600 font-semibold">
+                                    Expired
+                                </span>
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            เลือด: {{ member.blood_group|default:"—" }}
+                        </div>
+
+                        <div>
+                            โทร: {{ member.phone|default:"—" }}
+                        </div>
+
+                        <div>
+                            หมดอายุ: {{ member.expire_date }}
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- ================= BACK ================= -->
-        <div class="card-face card-back bg-gray-900 text-white p-4 flex flex-col justify-between">
+        <div class="card-face card-back bg-slate-900 text-white p-4 rounded-2xl flex flex-col justify-between">
 
-            <div class="text-center text-sm">
-                <div class="font-semibold">Gun Club Membership Card</div>
-                <div class="text-xs text-gray-300 mt-1">
-                    If found, please return to
+            <div class="text-center text-[11px]">
+                <div class="font-semibold text-sm">
+                    Gun Club Membership Card
                 </div>
-                <div class="font-medium mt-1">
-                    Gun Club Thailand
+
+                <div class="text-[10px] text-slate-300 mt-1">
+                    หากพบเจอบัตรนี้
                 </div>
-                <div class="text-xs text-gray-300">
-                    Contact: {{ member.phone }}
+
+                <div class="text-[11px] font-medium mt-1">
+                    กรุณาส่งคืนได้ที่ Gun Club Thailand
+                </div>
+
+                <div class="text-[10px] text-slate-300 mt-1">
+                    ติดต่อ: {{ member.phone|default:"—" }}
                 </div>
             </div>
 
-            <div class="flex justify-center">
-                <img src="{{ member.qr_code.url }}" class="w-24 h-24 bg-white p-1 rounded">
+            <div class="flex justify-center mt-2">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data={{ member.get_card_url|urlencode }}"
+                     alt="QR Code"
+                     class="w-20 h-20 sm:w-24 sm:h-24 bg-white p-1 rounded-lg">
             </div>
 
-            <div class="text-[10px] text-gray-400 text-center">
-                This card is the property of Gun Club.  
-                Misuse is prohibited.
+            <div class="text-[9px] text-slate-400 text-center">
+                บัตรนี้เป็นทรัพย์สินของ Gun Club ห้ามใช้ในทางมิชอบ
             </div>
+
         </div>
 
     </div>
 </div>
+
+<p class="mt-6 text-center text-slate-500 text-sm">
+    แตะเพื่อพลิกบัตร (ด้านหน้า/ด้านหลัง)
+</p>
 
 </body>
 </html>

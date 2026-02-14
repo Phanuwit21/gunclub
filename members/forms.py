@@ -1,5 +1,19 @@
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+
 from .models import Member
+
+
+class StaffRegisterForm(UserCreationForm):
+    """ฟอร์มสำหรับสร้างบัญชี Staff พร้อม validation ของ Django"""
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        attrs = {"class": "border border-gray-300 rounded px-3 py-2 w-full"}
+        self.fields["username"].widget.attrs.update(attrs)
+        self.fields["password1"].widget.attrs.update(attrs)
+        self.fields["password2"].widget.attrs.update(attrs)
+
 
 class MemberForm(forms.ModelForm):
 
@@ -58,3 +72,10 @@ class MemberForm(forms.ModelForm):
         elif role == "PRESIDENT":
             # เห็นทุก field + ทุก role
             pass
+
+        # สไตล์ input ทุก field
+        attrs = {"class": "input-field"}
+        for field_name, field in self.fields.items():
+            if field_name not in ("photo", "is_active"):
+                if hasattr(field.widget, "attrs"):
+                    field.widget.attrs.update(attrs)

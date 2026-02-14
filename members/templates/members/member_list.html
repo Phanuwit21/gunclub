@@ -1,62 +1,108 @@
 {% extends "base.html" %}
-
+{% block title %}รายชื่อสมาชิก — Gun Club{% endblock %}
 {% block content %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Members</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100">
-
-<div class="max-w-5xl mx-auto mt-10 bg-white shadow rounded p-6">
-    <h1 class="text-2xl font-bold mb-4">Member List</h1>
-        <form method="GET" class="mb-4">
-            <input
-                type="text"
-                name="q"
-                placeholder="Search member..."
-                class="border px-3 py-2 rounded-lg w-64"
-            >
-                <button class="bg-blue-900 text-white px-4 py-2 rounded-lg">Search</button>
-        </form>
-
-
-    <table class="w-full border">
-        <thead class="bg-gray-200">
-            <tr>
-                <th class="p-2">Member ID</th>
-                <th class="p-2">Full Name</th>
-                <th class="p-2">NickName</th>
-                <th class="p-2">Join</th>
-                <th class="p-2">Expire</th>
-                <th class="p-2">Status</th>
-                <th class="p-2">Card</th>
-                <th class="p-2">Edit</th>
-                <th class="p-2">Delete</th>
-            </tr>
-        </thead>
-
-        <tbody>
-        {% for m in members %}
-            <tr class="border-t text-center">
-                <td class="p-2">{{ m.member_id }}</td>
-                <td class="p-2">{{ m.first_name }} {{ m.last_name}}</td>
-                <td class="p-2">{{ m.nickname }}</td>
-                <td class="p-2">{{ m.join_date }}</td>
-                <td class="p-2">{{ m.expire_date }}</td>
-                <td class="p-2">{% if m.status == "Active" %}<span class="text-green-600 font-bold">Active</span>{% else %}<span class="text-red-500 font-bold">Expired</span>{% endif %}</td>
-                <td class="p-2"><a href="/member/{{ m.public_id }}/" class="text-blue-600">View</a></td>
-                <td class="p-2"><a href="/edit/{{ m.member_id }}/" class="text-blue-600">Edit</a></td>
-                <td class="p-2"><a href="/delete/{{ m.member_id }}/" class="text-red-600">Delete</a></td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-800">รายชื่อสมาชิก</h1>
 </div>
 
-</body>
-</html>
+{% if new_member_credentials %}
+<div class="mb-6 p-4 sm:p-5 bg-amber-50 border border-amber-200 rounded-2xl">
+    <p class="font-semibold text-amber-800 mb-2">✅ สร้างสมาชิกสำเร็จ — กรุณาบันทึกรหัสผ่านนี้ (แสดงครั้งเดียวเท่านั้น):</p>
+    <div class="font-mono text-sm bg-white/80 rounded-lg p-4 space-y-1">
+        <p><strong>Username:</strong> {{ new_member_credentials.username }}</p>
+        <p><strong>Password:</strong> {{ new_member_credentials.password }}</p>
+    </div>
+    <p class="mt-2 text-sm text-amber-700">ส่งรหัสผ่านให้สมาชิกทางช่องทางที่ปลอดภัย</p>
+</div>
+{% endif %}
+
+<form method="GET" class="mb-6 flex flex-col sm:flex-row gap-2 sm:gap-3">
+    <input type="text" name="q" value="{{ request.GET.q|default:'' }}"
+           placeholder="ค้นหา ชื่อ, รหัสสมาชิก, นามสกุล..."
+           class="flex-1 border border-slate-300 rounded-xl px-4 py-2.5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition">
+    <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-medium px-5 py-2.5 rounded-xl transition whitespace-nowrap">
+        ค้นหา
+    </button>
+</form>
+
+<!-- Desktop: Table -->
+<div class="hidden md:block bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="text-left p-4 text-sm font-semibold text-slate-600">รหัสสมาชิก</th>
+                    <th class="text-left p-4 text-sm font-semibold text-slate-600">ชื่อ-นามสกุล</th>
+                    <th class="text-left p-4 text-sm font-semibold text-slate-600">ชื่อเล่น</th>
+                    <th class="text-left p-4 text-sm font-semibold text-slate-600">สถานะ</th>
+                    <th class="text-right p-4 text-sm font-semibold text-slate-600">จัดการ</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for m in members %}
+                <tr class="border-t border-slate-100 hover:bg-slate-50/50 transition">
+                    <td class="p-4 font-mono font-medium text-slate-800">{{ m.member_id }}</td>
+                    <td class="p-4">{{ m.first_name }} {{ m.last_name }}</td>
+                    <td class="p-4 text-slate-600">{{ m.nickname|default:"—" }}</td>
+                    <td class="p-4">
+                        <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium {% if m.status == 'Active' %}bg-emerald-100 text-emerald-700{% else %}bg-red-100 text-red-700{% endif %}">
+                            {{ m.status }}
+                        </span>
+                    </td>
+                    <td class="p-4 text-right">
+                        <a href="{% url 'member_card' m.public_id %}" class="text-amber-600 hover:text-amber-700 font-medium text-sm mr-2">บัตร</a>
+                        <a href="{% url 'member_detail' m.member_id %}" class="text-slate-600 hover:text-slate-800 font-medium text-sm mr-2">ดู</a>
+                        <a href="{% url 'edit_member' m.pk %}" class="text-blue-600 hover:text-blue-700 font-medium text-sm mr-2">แก้ไข</a>
+                        <a href="{% url 'delete_member' m.member_id %}" class="text-red-600 hover:text-red-700 font-medium text-sm">ลบ</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5" class="p-8 text-center text-slate-500">ไม่พบสมาชิก</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Mobile: Cards -->
+<div class="md:hidden space-y-4">
+    {% for m in members %}
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
+        <div class="flex justify-between items-start mb-3">
+            <span class="font-mono font-bold text-slate-800">{{ m.member_id }}</span>
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium {% if m.status == 'Active' %}bg-emerald-100 text-emerald-700{% else %}bg-red-100 text-red-700{% endif %}">{{ m.status }}</span>
+        </div>
+        <div class="text-slate-800 font-medium">{{ m.first_name }} {{ m.last_name }}</div>
+        <div class="text-sm text-slate-500">{{ m.nickname|default:"—" }}</div>
+        <div class="mt-3 flex flex-wrap gap-2">
+            <a href="{% url 'member_card' m.public_id %}" class="text-sm text-amber-600 font-medium">บัตร</a>
+            <a href="{% url 'member_detail' m.member_id %}" class="text-sm text-slate-600 font-medium">ดู</a>
+            <a href="{% url 'edit_member' m.pk %}" class="text-sm text-blue-600 font-medium">แก้ไข</a>
+            <a href="{% url 'delete_member' m.member_id %}" class="text-sm text-red-600 font-medium">ลบ</a>
+        </div>
+    </div>
+    {% empty %}
+    <div class="bg-white rounded-2xl p-8 text-center text-slate-500">ไม่พบสมาชิก</div>
+    {% endfor %}
+</div>
+
+{% if page_obj.has_other_pages %}
+<div class="mt-6 flex flex-wrap items-center justify-center gap-2">
+    {% if page_obj.has_previous %}
+        <a href="?page={{ page_obj.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+           class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium transition">
+            ← ก่อนหน้า
+        </a>
+    {% endif %}
+    <span class="px-4 py-2 text-slate-600 text-sm">หน้า {{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+    {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}"
+           class="px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-sm font-medium transition">
+            ถัดไป →
+        </a>
+    {% endif %}
+</div>
+{% endif %}
 
 {% endblock %}

@@ -1,42 +1,30 @@
 {% extends "base.html" %}
-
+{% block title %}ลบสมาชิก — Gun Club{% endblock %}
 {% block content %}
 
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Delete Member</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-</head>
+<div class="max-w-md mx-auto">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 sm:p-8 text-center">
+        <div class="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4">
+            <svg class="w-7 h-7 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+            </svg>
+        </div>
+        <h1 class="text-xl font-bold text-slate-800 mb-2">ยืนยันการลบสมาชิก</h1>
+        <p class="text-slate-600 mb-6">
+            คุณต้องการลบสมาชิก <strong>{{ member.first_name }} {{ member.last_name }}</strong> ({{ member.member_id }}) หรือไม่?
+        </p>
+        <p class="text-sm text-slate-500 mb-6">การดำเนินการนี้ไม่สามารถย้อนกลับได้</p>
 
-<body class="bg-slate-100 min-h-screen flex items-center justify-center">
-
-<div class="bg-white p-8 rounded-2xl shadow-lg text-center">
-
-    <h1 class="text-xl font-bold mb-4 text-red-600">
-        Delete Member
-    </h1>
-
-    <p class="mb-6">
-        Are you sure you want to delete
-        <b>{{ member.first_name }} {{ member.last_name }}</b> ?
-    </p>
-
-    <form method="POST">
-        {% csrf_token %}
-
-        <button class="bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
-            Delete
-        </button>
-
-        <a href="/members/" class="bg-gray-300 px-6 py-2 rounded-lg">
-            Cancel
-        </a>
-    </form>
-
+        <form method="POST" class="flex flex-col sm:flex-row gap-3 justify-center">
+            {% csrf_token %}
+            <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-3 rounded-xl transition active:scale-[0.98]">
+                ลบสมาชิก
+            </button>
+            <a href="{% url 'member_list' %}" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium px-6 py-3 rounded-xl transition text-center active:scale-[0.98]">
+                ยกเลิก
+            </a>
+        </form>
+    </div>
 </div>
-
-</body>
-</html>
 
 {% endblock %}

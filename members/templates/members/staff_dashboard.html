@@ -1,104 +1,88 @@
 {% extends "base.html" %}
+{% block title %}แดชบอร์ด — Gun Club{% endblock %}
 {% block content %}
 
-<h1 class="text-2xl font-bold mb-8">📊 Staff Dashboard</h1>
+<h1 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-slate-800">📊 แดชบอร์ด</h1>
 
 <!-- Summary Cards -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-
-    <div class="bg-white p-6 rounded-xl shadow">
-        <div class="text-gray-500 text-sm">Total Members</div>
-        <div class="text-3xl font-bold mt-2">{{ total }}</div>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100">
+        <div class="text-slate-500 text-sm font-medium">สมาชิกทั้งหมด</div>
+        <div class="text-2xl sm:text-3xl font-bold mt-2 text-slate-800">{{ total }}</div>
+        <div class="text-xs text-slate-400 mt-1">คน</div>
     </div>
-
-    <div class="bg-green-50 p-6 rounded-xl shadow">
-        <div class="text-green-700 text-sm">Active</div>
-        <div class="text-3xl font-bold text-green-600 mt-2">{{ active }}</div>
+    <div class="bg-emerald-50 p-5 sm:p-6 rounded-2xl shadow-sm border border-emerald-100">
+        <div class="text-emerald-700 text-sm font-medium">สถานะ Active</div>
+        <div class="text-2xl sm:text-3xl font-bold mt-2 text-emerald-600">{{ active }}</div>
+        <div class="text-xs text-emerald-500 mt-1">คน</div>
     </div>
-
-    <div class="bg-red-50 p-6 rounded-xl shadow">
-        <div class="text-red-700 text-sm">Expired</div>
-        <div class="text-3xl font-bold text-red-600 mt-2">{{ expired }}</div>
+    <div class="bg-red-50 p-5 sm:p-6 rounded-2xl shadow-sm border border-red-100">
+        <div class="text-red-700 text-sm font-medium">หมดอายุแล้ว</div>
+        <div class="text-2xl sm:text-3xl font-bold mt-2 text-red-600">{{ expired }}</div>
+        <div class="text-xs text-red-500 mt-1">คน</div>
     </div>
-
 </div>
 
 <!-- Notifications -->
-<h2 class="text-xl font-bold mb-4">🔔 Notifications</h2>
+<h2 class="text-lg sm:text-xl font-bold mb-4 text-slate-800">🔔 แจ้งเตือน</h2>
 
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
     <!-- Expiring Soon -->
-    <div class="bg-yellow-50 p-5 rounded-xl shadow">
-        <h3 class="font-semibold text-yellow-700 mb-3">
-            ⚠ ใกล้หมดอายุ (30 วัน)
+    <div class="bg-amber-50 p-5 rounded-2xl shadow-sm border border-amber-100">
+        <h3 class="font-semibold text-amber-800 mb-3 flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+            ใกล้หมดอายุ (30 วัน)
         </h3>
-
         {% if expiring_soon %}
-            <ul class="space-y-2 text-sm">
+            <ul class="space-y-3 text-sm">
                 {% for m in expiring_soon %}
-                    <li class="flex justify-between">
+                    <li class="flex justify-between items-start bg-white/60 rounded-lg p-3">
                         <span>
-                            {{ m.member_id }}<br>
-                            <span class="text-gray-500">
-                                {{ m.first_name }} {{ m.last_name }}
-                            </span>
+                            <span class="font-mono font-medium text-slate-800">{{ m.member_id }}</span>
+                            <span class="block text-slate-500 text-xs">{{ m.first_name }} {{ m.last_name }}</span>
                         </span>
-                        <span class="text-yellow-700">
-                            {{ m.expire_date }}
-                        </span>
+                        <span class="text-amber-700 font-medium text-xs whitespace-nowrap">{{ m.expire_date }}</span>
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-sm text-gray-500">ไม่มีสมาชิกใกล้หมดอายุ</p>
+            <p class="text-sm text-slate-500">ไม่มีสมาชิกใกล้หมดอายุ</p>
         {% endif %}
     </div>
 
     <!-- Expired -->
-    <div class="bg-red-50 p-5 rounded-xl shadow">
-        <h3 class="font-semibold text-red-700 mb-3">
-            ❌ หมดอายุแล้ว
-        </h3>
-
+    <div class="bg-red-50 p-5 rounded-2xl shadow-sm border border-red-100">
+        <h3 class="font-semibold text-red-800 mb-3">หมดอายุแล้ว</h3>
         {% if expired_members %}
-            <ul class="space-y-2 text-sm">
+            <ul class="space-y-3 text-sm">
                 {% for m in expired_members %}
-                    <li>
-                        {{ m.member_id }}<br>
-                        <span class="text-gray-500">
-                            {{ m.first_name }} {{ m.last_name }}
-                        </span>
+                    <li class="bg-white/60 rounded-lg p-3">
+                        <span class="font-mono font-medium text-slate-800">{{ m.member_id }}</span>
+                        <span class="block text-slate-500 text-xs">{{ m.first_name }} {{ m.last_name }}</span>
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-sm text-gray-500">ไม่มีสมาชิกหมดอายุ</p>
+            <p class="text-sm text-slate-500">ไม่มีสมาชิกหมดอายุ</p>
         {% endif %}
     </div>
 
     <!-- New Members -->
-    <div class="bg-blue-50 p-5 rounded-xl shadow">
-        <h3 class="font-semibold text-blue-700 mb-3">
-            🆕 สมาชิกใหม่
-        </h3>
-
+    <div class="bg-blue-50 p-5 rounded-2xl shadow-sm border border-blue-100">
+        <h3 class="font-semibold text-blue-800 mb-3">สมาชิกใหม่</h3>
         {% if new_members %}
-            <ul class="space-y-2 text-sm">
+            <ul class="space-y-3 text-sm">
                 {% for m in new_members %}
-                    <li>
-                        {{ m.member_id }}<br>
-                        <span class="text-gray-500">
-                            {{ m.first_name }} {{ m.last_name }}
-                        </span>
+                    <li class="bg-white/60 rounded-lg p-3">
+                        <span class="font-mono font-medium text-slate-800">{{ m.member_id }}</span>
+                        <span class="block text-slate-500 text-xs">{{ m.first_name }} {{ m.last_name }}</span>
                     </li>
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-sm text-gray-500">ยังไม่มีสมาชิกใหม่</p>
+            <p class="text-sm text-slate-500">ยังไม่มีสมาชิกใหม่</p>
         {% endif %}
     </div>
-
 </div>
 
 {% endblock %}

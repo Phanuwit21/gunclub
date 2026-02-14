@@ -6,10 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 
 from .decorators import role_required
-from .forms import MemberForm
+from .forms import MemberForm, StaffRegisterForm
 from .models import Member
 from django.utils import timezone
 
@@ -89,17 +90,27 @@ def staff_dashboard(request):
 @role_required(["PRESIDENT", "COMMITTEE"])
 def staff_register(request):
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
+        form = StaffRegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # สร้าง Member profile ให้ Staff (จำเป็นสำหรับ role_required)
+            Member.objects.create(
+                user=user,
+                first_name=user.username,
+                last_name="Staff",
+                join_date=date.today(),
+                role="STAFF",
+            )
+            messages.success(request, f"สร้างบัญชี Staff '{user.username}' เรียบร้อยแล้ว")
+            return redirect("staff_dashboard")
+        else:
+            for field, errors in form.errors.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+    else:
+        form = StaffRegisterForm()
 
-        if User.objects.filter(username=username).exists():
-            messages.error(request, "Username already exists")
-            return redirect("staff_register")
-
-        User.objects.create_user(username=username, password=password)
-        return redirect("staff_dashboard")
-
-    return render(request, "members/staff_register.html")
+    return render(request, "members/staff_register.html", {"form": form})
 
 
 # =========================
@@ -112,16 +123,28 @@ def member_list(request):
     query = request.GET.get("q")
 
     if query:
-        members = Member.objects.filter(
+        members_qs = Member.objects.filter(
             Q(first_name__icontains=query) |
             Q(last_name__icontains=query) |
             Q(member_id__icontains=query) |
             Q(nickname__icontains=query)
         ).order_by("-id")
     else:
-        members = Member.objects.all().order_by("-id")
+        members_qs = Member.objects.all().order_by("-id")
 
-    return render(request, "members/member_list.html", {"members": members})
+    paginator = Paginator(members_qs, 15)
+    page_number = request.GET.get("page", 1)
+    page_obj = paginator.get_page(page_number)
+
+    new_member_credentials = None
+    if "new_member_credentials" in request.session:
+        new_member_credentials = request.session.pop("new_member_credentials")
+
+    return render(request, "members/member_list.html", {
+        "members": page_obj,
+        "page_obj": page_obj,
+        "new_member_credentials": new_member_credentials,
+    })
 
 
 @login_required
@@ -133,9 +156,11 @@ def add_member(request):
         if form.is_valid():
             member = form.save(commit=False)
 
+            random_password = User.objects.make_random_password(length=12)
+
             user = User.objects.create_user(
                 username="temp_user",
-                password="1234"
+                password=random_password
             )
 
             member.user = user
@@ -143,6 +168,11 @@ def add_member(request):
 
             user.username = member.member_id
             user.save()
+
+            request.session["new_member_credentials"] = {
+                "username": member.member_id,
+                "password": random_password,
+            }
 
             return redirect("member_list")
     else:
@@ -161,6 +191,7 @@ def edit_member(request, pk):
         form = MemberForm(request.POST, request.FILES, instance=member, user=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, f"แก้ไขข้อมูล {member.member_id} เรียบร้อยแล้ว")
             return redirect("member_list")
     else:
         form = MemberForm(instance=member, user=request.user)
@@ -182,6 +213,7 @@ def delete_member(request, member_id):
             member.user.delete()
 
         member.delete()
+        messages.success(request, f"ลบสมาชิก {member.member_id} เรียบร้อยแล้ว")
         return redirect("member_list")
 
     return render(request, "members/delete_member.html", {"member": member})
@@ -193,7 +225,11 @@ def delete_member(request, member_id):
 
 @login_required
 def member_dashboard(request):
-    member = Member.objects.get(user=request.user)
+    try:
+        member = Member.objects.get(user=request.user)
+    except Member.DoesNotExist:
+        messages.error(request, "ไม่มีข้อมูลสมาชิก")
+        return redirect("staff_login")
 
     return render(request, "members/member_dashboard.html", {
         "member": member
@@ -214,6 +250,7 @@ def edit_profile(request):
         )
         if form.is_valid():
             form.save()
+            messages.success(request, "บันทึกโปรไฟล์เรียบร้อยแล้ว")
 
             # redirect ตาม role
             if role == "MEMBER":
@@ -250,6 +287,7 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
+            messages.success(request, "เปลี่ยนรหัสผ่านเรียบร้อยแล้ว")
 
             if is_staff_side:
                 return redirect("staff_dashboard")
@@ -303,6 +341,7 @@ def my_card(request):
 # =========================
 
 @login_required
+@role_required(["STAFF", "COMMITTEE", "PRESIDENT"])
 def member_detail(request, member_id):
     member = get_object_or_404(Member, member_id=member_id)
     return render(request, "members/member_detail.html", {"member": member})

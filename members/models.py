@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
 from datetime import date, timedelta
 import uuid
 
@@ -105,7 +106,9 @@ class Member(models.Model):
         return "Expired"
 
     def get_card_url(self):
-        return f"http://127.0.0.1:8000/member/{self.public_id}/"
+        from django.conf import settings
+        base = getattr(settings, 'SITE_URL', 'http://127.0.0.1:8000').rstrip('/')
+        return f"{base}/member/{self.public_id}/"
 
 
     def is_expired(self):

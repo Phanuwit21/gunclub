@@ -38,7 +38,8 @@ DEBUG = os.environ.get('DJANGO_DEBUG', 'True').lower() in ('true', '1', 'yes')
 
 ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',')
 
-# Base URL for member card links (used in get_card_url)
+# Base URL for member card links and QR code (ใช้ใน get_card_view_only_url)
+# เมื่อ deploy production ให้เปลี่ยนเป็น domain จริง เช่น https://your-domain.com
 SITE_URL = os.environ.get('SITE_URL', 'http://127.0.0.1:8000')
 
 

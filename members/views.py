@@ -1,3 +1,4 @@
+import logging
 from datetime import date, timedelta
 
 from django.contrib import messages
@@ -12,7 +13,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .decorators import role_required
 from .forms import MemberForm, StaffRegisterForm
 from .models import Member
+from .utils import generate_qr_base64
 from django.utils import timezone
+
+logger = logging.getLogger(__name__)
 
 
 # =========================
@@ -156,11 +160,12 @@ def add_member(request):
         if form.is_valid():
             member = form.save(commit=False)
 
-            random_password = User.objects.make_random_password(length=12)
+            # รหัสผ่านเริ่มต้น = เบอร์โทรของสมาชิก (ต้องเปลี่ยนหลังล็อกอินครั้งแรก)
+            initial_password = (member.phone or "").strip() or "1234"
 
             user = User.objects.create_user(
                 username="temp_user",
-                password=random_password
+                password=initial_password
             )
 
             member.user = user
@@ -171,10 +176,12 @@ def add_member(request):
 
             request.session["new_member_credentials"] = {
                 "username": member.member_id,
-                "password": random_password,
+                "password": initial_password,
             }
 
             return redirect("member_list")
+        else:
+            messages.error(request, "กรุณาตรวจสอบข้อมูลให้ถูกต้อง")
     else:
         form = MemberForm(user=request.user)
 
@@ -238,7 +245,10 @@ def member_dashboard(request):
 
 @login_required
 def edit_profile(request):
-    member = request.user.member
+    member = getattr(request.user, 'member', None)
+    if not member:
+        messages.error(request, "ไม่มีข้อมูลสมาชิก กรุณาติดต่อผู้ดูแลระบบ")
+        return redirect("staff_login")
     role = member.role
 
     if request.method == "POST":
@@ -279,7 +289,10 @@ def edit_profile(request):
 
 @login_required
 def change_password(request):
-    member = request.user.member
+    member = getattr(request.user, 'member', None)
+    if not member:
+        messages.error(request, "ไม่มีข้อมูลสมาชิก กรุณาติดต่อผู้ดูแลระบบ")
+        return redirect("staff_login")
     is_staff_side = member.role in ["STAFF", "COMMITTEE", "PRESIDENT"]
 
     if request.method == "POST":
@@ -311,21 +324,83 @@ def change_password(request):
 def member_card(request, public_id):
     member = get_object_or_404(Member, public_id=public_id)
 
-    # เช็กวันหมดอายุ
-    if member.expire_date and member.expire_date < timezone.now().date():
-        return redirect('member_card_expired', public_id=member.public_id)
+    if not member.is_valid():
+        return render(request, "members/card_unavailable.html", {
+            "member": member,
+        })
 
-    return render(request, 'members/member_card.html', {
-        'member': member,
-        "today": date.today()
+    # ลิงก์กลับ Dashboard ตาม role ของผู้ที่ล็อกอินอยู่
+    dashboard_url = None
+    if request.user.is_authenticated:
+        try:
+            m = Member.objects.get(user=request.user)
+            dashboard_url = "staff_dashboard" if m.role in ("STAFF", "COMMITTEE", "PRESIDENT") else "member_dashboard"
+        except Member.DoesNotExist:
+            dashboard_url = "staff_login"
+
+    card_url = member.get_card_view_only_url()
+    qr_image = generate_qr_base64(card_url, size=120) or None
+
+    return render(request, "members/member_card.html", {
+        "member": member,
+        "today": date.today(),
+        "dashboard_url": dashboard_url,
+        "qr_image": qr_image,
+        "qr_fallback_url": card_url,
     })
 
 def member_card_expired(request, public_id):
     member = get_object_or_404(Member, public_id=public_id)
 
+    if not member.is_valid():
+        return render(request, "members/card_unavailable.html", {
+            "member": member,
+        })
+
     return render(request, 'members/member_card_expired.html', {
         'member': member,
         "today": date.today()
+    })
+
+
+def member_card_view_only(request, public_id):
+    """หน้าแสดงบัตรอย่างเดียว สำหรับ QR scan - ไม่มีปุ่มกลับ ป้องกันผู้สแกนเข้าถึงระบบ"""
+    member = get_object_or_404(Member, public_id=public_id)
+
+    logger.info(
+        "card_scan public_id=%s remote_addr=%s",
+        str(member.public_id),
+        request.META.get("REMOTE_ADDR", "unknown"),
+    )
+
+    if not member.is_valid():
+        return render(request, "members/card_unavailable.html", {
+            "member": member,
+        })
+
+    card_url = member.get_card_view_only_url()
+    qr_image = generate_qr_base64(card_url, size=120) or None
+
+    return render(request, "members/member_card_view_only.html", {
+        "member": member,
+        "today": date.today(),
+        "qr_image": qr_image,
+        "qr_fallback_url": card_url,
+    })
+
+
+def member_card_expired_view_only(request, public_id):
+    """หน้าแสดงบัตรหมดอายุอย่างเดียว สำหรับ QR scan - ไม่มีปุ่มกลับ"""
+    member = get_object_or_404(Member, public_id=public_id)
+
+    if not member.is_valid():
+        return render(request, "members/card_unavailable.html", {
+            "member": member,
+        })
+
+    return render(request, "members/member_card_expired_view_only.html", {
+        "member": member,
+        "today": date.today(),
     })
 
 

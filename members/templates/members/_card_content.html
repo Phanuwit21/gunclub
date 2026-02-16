@@ -1,0 +1,84 @@
+{% comment %} ส่วนเนื้อหาบัตร - ใช้ร่วมกันระหว่าง member_card และ member_card_view_only {% endcomment %}
+<div class="card-container w-full max-w-sm flex justify-center cursor-pointer select-none"
+     onclick="this.querySelector('.card').classList.toggle('flipped')">
+
+    <div class="card shadow-2xl rounded-2xl bg-transparent overflow-hidden">
+
+        <!-- FRONT -->
+        <div class="card-face bg-white rounded-2xl overflow-hidden flex flex-col border border-slate-200/50">
+            <div class="h-9
+                {% if member.role == 'PRESIDENT' %}bg-gradient-to-r from-red-600 to-amber-500
+                {% elif member.role == 'COMMITTEE' %}bg-gradient-to-r from-purple-600 to-indigo-500
+                {% elif member.role == 'STAFF' %}bg-gradient-to-r from-emerald-600 to-teal-500
+                {% else %}bg-gradient-to-r from-sky-600 to-blue-500{% endif %}
+                flex items-center justify-between px-4 text-[11px] text-white shadow-sm">
+
+                <span class="font-bold tracking-wider">GUN CLUB MEMBERSHIP</span>
+                <span class="px-2.5 py-1 rounded-full text-[10px] font-bold
+                    {% if member.role == 'PRESIDENT' %}bg-white/25
+                    {% elif member.role == 'COMMITTEE' %}bg-white/25
+                    {% elif member.role == 'STAFF' %}bg-white/25
+                    {% else %}bg-white/25{% endif %}">
+                    {{ member.get_role_display }}
+                </span>
+            </div>
+
+            <div class="flex-1 flex p-4 gap-4">
+                <div class="flex-shrink-0">
+                    {% if member.photo %}
+                        <img src="{{ member.photo.url }}" class="w-24 h-32 object-cover rounded-xl border-2 border-slate-100 shadow" alt="">
+                    {% else %}
+                        <div class="w-24 h-32 bg-gradient-to-br from-slate-100 to-slate-200 rounded-xl flex items-center justify-center text-slate-500 text-sm font-medium shadow-inner">
+                            No Photo
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div class="flex-1 min-w-0 text-[12px] leading-snug">
+                    <div class="font-bold text-base text-slate-800 truncate">
+                        {{ member.first_name }} {{ member.last_name }}
+                    </div>
+                    <div class="text-slate-500 text-[11px] truncate">
+                        {{ member.first_name_en }} {{ member.last_name_en }}
+                    </div>
+                    <div class="mt-1.5 text-slate-600">
+                        ชื่อเล่น: <span class="font-semibold">{{ member.nickname|default:"—" }}</span>
+                    </div>
+                    <div class="mt-2 font-mono font-bold text-amber-600 text-[13px]">
+                        {{ member.member_id }}
+                    </div>
+                    <div class="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
+                        <div>
+                            สถานะ:
+                            <span class="{% if member.status == 'Active' %}text-emerald-600{% else %}text-red-600{% endif %} font-bold">
+                                {{ member.status }}
+                            </span>
+                        </div>
+                        <div>เลือด: {{ member.blood_group|default:"—" }}</div>
+                        <div>โทร: {{ member.phone|default:"—" }}</div>
+                        <div>หมดอายุ: {{ member.expire_date }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- BACK -->
+        <div class="card-face card-back bg-gradient-to-br from-slate-800 to-slate-900 text-white rounded-2xl border border-slate-700/50 overflow-hidden">
+            <div class="card-back-inner w-full h-full p-5 flex flex-col justify-between">
+                <div class="text-center">
+                    <div class="font-bold text-sm">Gun Club Membership Card</div>
+                    <div class="text-slate-300 text-[11px] mt-2">หากพบเจอบัตรนี้</div>
+                    <div class="text-[13px] font-semibold mt-1">กรุณาส่งคืนได้ที่ Gun Club Thailand</div>
+                    <div class="text-slate-400 text-[11px] mt-2">ติดต่อ: {{ member.phone|default:"—" }}</div>
+                </div>
+                <div class="flex justify-center my-2">
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data={{ member.get_card_view_only_url|urlencode }}"
+                         alt="QR Code" class="w-20 h-20 sm:w-24 sm:h-24 bg-white p-1.5 rounded-xl shadow-lg">
+                </div>
+                <div class="text-[9px] text-slate-500 text-center">
+                    บัตรนี้เป็นทรัพย์สินของ Gun Club ห้ามใช้ในทางมิชอบ
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

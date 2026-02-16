@@ -19,6 +19,10 @@ class MemberForm(forms.ModelForm):
 
     class Meta:
         model = Member
+        widgets = {
+            "join_date": forms.DateInput(attrs={"type": "date"}),
+            "expire_date": forms.DateInput(attrs={"type": "date"}),
+        }
         fields = [
             "first_name",
             "last_name",
@@ -74,8 +78,22 @@ class MemberForm(forms.ModelForm):
             pass
 
         # สไตล์ input ทุก field
-        attrs = {"class": "input-field"}
+        input_attrs = {
+            "class": "w-full border-2 border-slate-300 rounded-lg px-4 py-2.5 "
+                     "bg-white text-slate-800 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
+        }
         for field_name, field in self.fields.items():
-            if field_name not in ("photo", "is_active"):
+            if field_name != "photo":
                 if hasattr(field.widget, "attrs"):
-                    field.widget.attrs.update(attrs)
+                    field.widget.attrs.update(input_attrs)
+
+    def clean_phone(self):
+        """แปลงเบอร์โทรให้เป็นตัวเลขเท่านั้น ก่อน validate 9-15 หลัก"""
+        value = (self.cleaned_data.get("phone") or "").strip()
+        if not value:
+            return value
+        digits = "".join(c for c in value if c.isdigit())
+        if len(digits) < 9 or len(digits) > 15:
+            from django.core.exceptions import ValidationError
+            raise ValidationError("เบอร์โทรต้องเป็นตัวเลข 9-15 หลักเท่านั้น")
+        return digits

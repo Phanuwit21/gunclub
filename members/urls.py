@@ -18,12 +18,15 @@ urlpatterns = [
 
     # public card
     path("member/<uuid:public_id>/", views.member_card, name="member_card"),
+    path("member/<uuid:public_id>/expired/", views.member_card_expired, name="member_card_expired"),
+    path("card/<uuid:public_id>/", views.member_card_view_only, name="member_card_view_only"),
+    path("card/<uuid:public_id>/expired/", views.member_card_expired_view_only, name="member_card_expired_view_only"),
     path("my-card/", views.my_card, name="my_card"),
     path("dashboard/", views.member_dashboard, name="member_dashboard"),
 
 
     # edit/delete
-    path("edit/<str:member_id>/", views.edit_member, name="edit_member"),
+    path("edit/<int:pk>/", views.edit_member, name="edit_member"),
     path("delete/<str:member_id>/", views.delete_member, name="delete_member"),
     path("password/", views.change_password, name="change_password"),
 

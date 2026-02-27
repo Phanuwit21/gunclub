@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1,
+    "user": 2,
+    "first_name": "ภาณุวิชญ์",
+    "last_name": "ศรีสังวาลย์",
+    "first_name_en": "Phanuwit",
+    "last_name_en": "Srisangwan",
+    "nickname": "Frame",
+    "phone": "0934092171",
+    "blood_group": "A",
+    "address": "357 ม.4 A.P AP Apartment ต.บ้านดู่ อ.เมือง จ.เชียงราย 57100",
+    "photo": "member_photos/4a37171e8b80a667195f37e0240c3464_A64wPtp.jpg",
+    "join_date": "2026-02-15",
+    "expire_date": "2027-02-15",
+    "role": "PRESIDENT",
+    "is_active": true
+  },
+  {
+    "id": 2,
+    "user": 3,
+    "first_name": "นฤสรณ์",
+    "last_name": "ศรีสังวาลย์",
+    "first_name_en": "Naruesorn",
+    "last_name_en": "Srisangwan",
+    "nickname": "Phone",
+    "phone": "0884075071",
+    "blood_group": "AB",
+    "address": "A.P Apartment",
+    "photo": "member_photos/4a37171e8b80a667195f37e0240c3464_G6ti5BB.jpg",
+    "join_date": "2026-02-16",
+    "expire_date": "2026-02-28",
+    "role": "MEMBER",
+    "is_active": true
+  },
+  {
+    "id": 3,
+    "user": 4,
+    "first_name": "panda",
+    "last_name": "panda",
+    "first_name_en": "panda",
+    "last_name_en": "panda",
+    "nickname": "panda",
+    "phone": "0934092171",
+    "blood_group": "A",
+    "address": "...",
+    "photo": "media/member_photos/Screenshot_2026-02-17_234334_qituyw",
+    "join_date": "2026-02-27",
+    "expire_date": "2027-02-27",
+    "role": "STAFF",
+    "is_active": true
+  }
+]

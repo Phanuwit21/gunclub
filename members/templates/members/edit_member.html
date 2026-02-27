@@ -1,10 +1,11 @@
 {% extends "base.html" %}
-{% block title %}แก้ไข {{ member.member_id }} — Gun Club{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "แก้ไข" %} {{ member.member_id }} — Gun Club{% endblock %}
 {% block content %}
 
 <div class="max-w-2xl">
     <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-slate-800">
-        แก้ไขสมาชิก — <span class="font-mono text-amber-600">{{ member.member_id }}</span>
+        {% trans "แก้ไขสมาชิก" %} — <span class="font-mono text-amber-600">{{ member.member_id }}</span>
     </h1>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 sm:p-8">
@@ -27,11 +28,11 @@
             {% endfor %}
 
             <div class="pt-4 flex flex-col sm:flex-row gap-3">
-                <button type="submit" class="btn-primary py-3 px-6 w-full sm:w-auto">
-                    บันทึกการแก้ไข
+                <button type="submit" class="btn-primary py-3 px-6 w-full rounded-xl sm:w-auto bg-amber-600 hover:bg-amber-700 text-white">
+                    {% trans "บันทึกการแก้ไข" %}
                 </button>
-                <a href="{% url 'member_list' %}" class="btn-secondary py-3 px-6 rounded-lg text-center w-full sm:w-auto">
-                    ยกเลิก
+                <a href="{% url 'member_list' %}" class="btn-secondary py-3 px-6 rounded-xl text-center w-full sm:w-auto bg-slate-600 hover:bg-slate-700 text-white">
+                    {% trans "ยกเลิก" %}
                 </a>
             </div>
         </form>

@@ -1,10 +1,11 @@
+{% load i18n %}
 <!DOCTYPE html>
-<html lang="th">
+<html lang="{{ request.LANGUAGE_CODE|default:'th' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f172a">
-    <title>บัตรหมดอายุ — {{ member.member_id }}</title>
+    <title>{% trans "บัตรหมดอายุ" %} — {{ member.member_id }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,13 +20,13 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
         </svg>
     </div>
-    <h1 class="text-xl font-bold text-red-400 mb-2">บัตรสมาชิกหมดอายุแล้ว</h1>
+    <h1 class="text-xl font-bold text-red-400 mb-2">{% trans "บัตรสมาชิกหมดอายุแล้ว" %}</h1>
     <p class="text-slate-300 mb-4">
-        สมาชิก: <strong>{{ member.first_name }} {{ member.last_name }}</strong><br>
-        รหัสสมาชิก: <span class="font-mono font-semibold text-amber-400">{{ member.member_id }}</span>
+        {% trans "สมาชิก" %}: <strong>{{ member.first_name }} {{ member.last_name }}</strong><br>
+        {% trans "รหัสสมาชิก" %}: <span class="font-mono font-semibold text-amber-400">{{ member.member_id }}</span>
     </p>
     <p class="text-sm text-slate-500">
-        กรุณาติดต่อเจ้าหน้าที่เพื่อต่ออายุสมาชิก
+        {% trans "กรุณาติดต่อเจ้าหน้าที่เพื่อต่ออายุสมาชิก" %}
     </p>
 </div>
 

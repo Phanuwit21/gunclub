@@ -50,11 +50,11 @@
                     <div class="mt-2 grid grid-cols-2 gap-x-3 gap-y-1 text-[11px]">
                         <div>
                             สถานะ:
-                            <span class="{% if member.status == 'Active' %}text-emerald-600{% else %}text-red-600{% endif %} font-bold">
+                            <span class="text-slate-700 font-bold">
                                 {{ member.status }}
                             </span>
                         </div>
-                        <div>เลือด: {{ member.blood_group|default:"—" }}</div>
+                        <div>กรุ๊ปเลือด: {{ member.blood_group|default:"—" }}</div>
                         <div>โทร: {{ member.phone|default:"—" }}</div>
                         <div>หมดอายุ: {{ member.expire_date }}</div>
                     </div>

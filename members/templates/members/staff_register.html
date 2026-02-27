@@ -1,9 +1,10 @@
 {% extends "base.html" %}
-{% block title %}สร้าง Staff — Gun Club{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "สร้าง Staff" %} — Gun Club{% endblock %}
 {% block content %}
 
 <div class="max-w-md">
-    <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-slate-800">สร้างบัญชี Staff</h1>
+    <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-slate-800">{% trans "สร้างบัญชี Staff" %}</h1>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 sm:p-8">
         <form method="post" class="space-y-4">
@@ -14,19 +15,19 @@
                 {% if form.username.errors %}<p class="text-red-500 text-xs mt-1">{{ form.username.errors.0 }}</p>{% endif %}
             </div>
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1.5">รหัสผ่าน</label>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">{% trans "รหัสผ่าน" %}</label>
                 {{ form.password1 }}
                 {% if form.password1.errors %}<p class="text-red-500 text-xs mt-1">{{ form.password1.errors.0 }}</p>{% endif %}
             </div>
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1.5">ยืนยันรหัสผ่าน</label>
+                <label class="block text-sm font-medium text-slate-700 mb-1.5">{% trans "ยืนยันรหัสผ่าน" %}</label>
                 {{ form.password2 }}
                 {% if form.password2.errors %}<p class="text-red-500 text-xs mt-1">{{ form.password2.errors.0 }}</p>{% endif %}
             </div>
-            <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-6 rounded-xl transition shadow-sm w-full sm:w-auto">สร้าง Staff</button>
+            <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-6 rounded-xl transition shadow-sm w-full sm:w-auto">{% trans "สร้าง Staff" %}</button>
         </form>
 
-        <p class="mt-4 text-sm text-slate-500">รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัว และไม่ใช่ตัวเลขอย่างเดียว</p>
+        <p class="mt-4 text-sm text-slate-500">{% trans "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัว และไม่ใช่ตัวเลขอย่างเดียว" %}</p>
     </div>
 </div>
 

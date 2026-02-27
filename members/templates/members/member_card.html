@@ -1,10 +1,12 @@
+{% load i18n %}{% load static %}
 <!DOCTYPE html>
-<html lang="th">
+<html lang="{{ request.LANGUAGE_CODE|default:'th' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f172a">
-    <title>บัตรสมาชิก — {{ member.member_id }}</title>
+    <link rel="icon" type="image/jpeg" href="{% static 'images/logo.jpg' %}">
+    <title>{% trans "บัตรสมาชิก" %} — {{ member.member_id }}</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -28,17 +30,46 @@
             border-radius: 1rem;
         }
         .card-back { transform: rotateY(180deg); }
+
+        /* Print styles */
+        @media print {
+            @page {
+                size: 85.6mm 54mm;
+                margin: 0;
+            }
+            body {
+                background: white !important;
+                min-height: auto !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            .no-print { display: none !important; }
+            .card-container {
+                perspective: none;
+                width: 85.6mm;
+                height: 54mm;
+            }
+            .card {
+                width: 85.6mm !important;
+                height: 54mm !important;
+                transform: none !important;
+                box-shadow: none !important;
+            }
+            .card.flipped { transform: none !important; }
+            .card-back { display: none !important; }
+            .card-face { position: relative !important; }
+        }
     </style>
 </head>
 
 <body class="bg-slate-100 min-h-screen flex flex-col items-center justify-center p-4 py-8">
 
 {% if dashboard_url %}
-<div class="w-full max-w-md mb-4 flex justify-start">
+<div class="w-full max-w-md mb-4 flex justify-start no-print">
     <a href="{% url dashboard_url %}"
        class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white/80 hover:bg-white text-slate-700 shadow-sm border border-slate-200 text-sm font-medium transition">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
-        กลับไปหน้า Dashboard
+        {% trans "กลับไปหน้า Dashboard" %}
     </a>
 </div>
 {% endif %}
@@ -51,34 +82,15 @@
         <!-- ================= FRONT ================= -->
         <div class="card-face bg-white rounded-2xl overflow-hidden flex flex-col">
 
-            <!-- แถบสีตาม role -->
-            <div class="h-8
-                {% if member.role == 'PRESIDENT' %}
-                    bg-gradient-to-r from-red-600 to-amber-500
-                {% elif member.role == 'COMMITTEE' %}
-                    bg-gradient-to-r from-purple-600 to-indigo-500
-                {% elif member.role == 'STAFF' %}
-                    bg-gradient-to-r from-emerald-600 to-teal-500
-                {% else %}
-                    bg-gradient-to-r from-sky-600 to-blue-500
-                {% endif %}
-                flex items-center justify-between px-3 text-[11px] text-white">
-
-                <span class="font-semibold tracking-wide">
-                    GUN CLUB MEMBERSHIP
-                </span>
-
-                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold
-                    {% if member.role == 'PRESIDENT' %}
-                        bg-red-600
-                    {% elif member.role == 'COMMITTEE' %}
-                        bg-purple-600
-                    {% elif member.role == 'STAFF' %}
-                        bg-emerald-600
-                    {% else %}
-                        bg-sky-600
-                    {% endif %}
-                ">
+            <!-- Header with Logo -->
+            <div class="h-10 bg-gradient-to-r from-slate-800 to-slate-700 flex items-center justify-between px-3">
+                <div class="flex items-center gap-2">
+                    <img src="{% static 'images/logo.jpg' %}" alt="Logo" class="h-6 w-auto rounded">
+                    <span class="font-semibold tracking-wide text-[11px] text-white">
+                        GUN CLUB MEMBERSHIP
+                    </span>
+                </div>
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-600 text-white">
                     {{ member.get_role_display }}
                 </span>
             </div>
@@ -111,7 +123,7 @@
                     </div>
 
                     <div class="mt-1">
-                        ชื่อเล่น:
+                        {% trans "ชื่อเล่น" %}:
                         <span class="font-medium">
                             {{ member.nickname|default:"—" }}
                         </span>
@@ -123,22 +135,22 @@
 
                     <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">
                         <div>
-                            สถานะ:
-                            <span class="{% if member.status == 'Active' %}text-emerald-600{% else %}text-red-600{% endif %} font-semibold">
+                            {% trans "สถานะ" %}:
+                            <span class="text-slate-700 font-semibold">
                                 {{ member.status }}
                             </span>
                         </div>
 
                         <div>
-                            เลือด: {{ member.blood_group|default:"—" }}
+                            {% trans "กรุ๊ปเลือด" %}: {{ member.blood_group|default:"—" }}
                         </div>
 
                         <div>
-                            โทร: {{ member.phone|default:"—" }}
+                            {% trans "โทร" %}: {{ member.phone|default:"—" }}
                         </div>
 
                         <div>
-                            หมดอายุ: {{ member.expire_date }}
+                            {% trans "หมดอายุ" %}: {{ member.expire_date }}
                         </div>
                     </div>
                 </div>
@@ -154,15 +166,15 @@
                 </div>
 
                 <div class="text-[10px] text-slate-300 mt-1">
-                    หากพบเจอบัตรนี้
+                    {% trans "หากพบเจอบัตรนี้" %}
                 </div>
 
                 <div class="text-[11px] font-medium mt-1">
-                    กรุณาส่งคืนได้ที่ Gun Club Thailand
+                    {% trans "กรุณาส่งคืนได้ที่ Gun Club Thailand" %}
                 </div>
 
                 <div class="text-[10px] text-slate-300 mt-1">
-                    ติดต่อ: {{ member.phone|default:"—" }}
+                    {% trans "ติดต่อ" %}: {{ member.phone|default:"—" }}
                 </div>
             </div>
 
@@ -178,7 +190,7 @@
             </div>
 
             <div class="text-[9px] text-slate-400 text-center">
-                บัตรนี้เป็นทรัพย์สินของ Gun Club ห้ามใช้ในทางมิชอบ
+                {% trans "บัตรนี้เป็นทรัพย์สินของ Gun Club ห้ามใช้ในทางมิชอบ" %}
             </div>
 
         </div>
@@ -186,8 +198,8 @@
     </div>
 </div>
 
-<p class="mt-6 text-center text-slate-500 text-sm">
-    แตะเพื่อพลิกบัตร (ด้านหน้า/ด้านหลัง)
+<p class="mt-6 text-center text-slate-500 text-sm no-print">
+    {% trans "แตะเพื่อพลิกบัตร (ด้านหน้า/ด้านหลัง)" %}
 </p>
 
 </body>

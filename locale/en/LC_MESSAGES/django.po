@@ -1,0 +1,485 @@
+# Gun Club Membership - English translations
+# Copyright (C) 2025
+# This file is distributed under the same license as the Gun Club project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-01-01 00:00+0000\n"
+"PO-Revision-Date: 2025-01-01 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: English\n"
+"Language: en\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#: members/templates/base.html
+msgid "จัดการระบบ"
+msgstr "System"
+
+#: members/templates/base.html
+msgid "แดชบอร์ด"
+msgstr "Dashboard"
+
+#: members/templates/base.html
+msgid "รายชื่อสมาชิก"
+msgstr "Members"
+
+#: members/templates/base.html
+msgid "เพิ่มสมาชิก"
+msgstr "Add Member"
+
+#: members/templates/base.html
+msgid "สร้าง Staff"
+msgstr "Register Staff"
+
+#: members/templates/base.html
+msgid "บัญชีของฉัน"
+msgstr "My Account"
+
+#: members/templates/base.html
+msgid "แก้ไขโปรไฟล์"
+msgstr "Edit Profile"
+
+#: members/templates/base.html
+msgid "เปลี่ยนรหัสผ่าน"
+msgstr "Change Password"
+
+#: members/templates/base.html
+msgid "บัตรของฉัน"
+msgstr "My Card"
+
+#: members/templates/base.html
+msgid "ออกจากระบบ"
+msgstr "Logout"
+
+#: members/templates/base_member.html
+msgid "สมาชิก"
+msgstr "Member"
+
+#: members/templates/members/staff_dashboard.html
+msgid "สมาชิกทั้งหมด"
+msgstr "Total Members"
+
+#: members/templates/members/staff_dashboard.html
+msgid "คน"
+msgstr "members"
+
+#: members/templates/members/staff_dashboard.html
+msgid "สถานะ Active"
+msgstr "Active"
+
+#: members/templates/members/staff_dashboard.html
+msgid "หมดอายุแล้ว"
+msgstr "Expired"
+
+#: members/templates/members/staff_dashboard.html
+msgid "แจ้งเตือน"
+msgstr "Notifications"
+
+#: members/templates/members/staff_dashboard.html
+msgid "ใกล้หมดอายุ (30 วัน)"
+msgstr "Expiring soon (30 days)"
+
+#: members/templates/members/staff_dashboard.html
+msgid "ไม่มีสมาชิกใกล้หมดอายุ"
+msgstr "No members expiring soon"
+
+#: members/templates/members/staff_dashboard.html
+msgid "ไม่มีสมาชิกหมดอายุ"
+msgstr "No expired members"
+
+#: members/templates/members/staff_dashboard.html
+msgid "สมาชิกใหม่"
+msgstr "New Members"
+
+#: members/templates/members/staff_dashboard.html
+msgid "ยังไม่มีสมาชิกใหม่"
+msgstr "No new members yet"
+
+#: members/templates/members/member_dashboard.html
+msgid "แดชบอร์ดของฉัน"
+msgstr "My Dashboard"
+
+#: members/templates/members/member_dashboard.html
+msgid "หมดอายุ"
+msgstr "Expires"
+
+#: members/templates/members/member_dashboard.html
+msgid "ดูบัตรของฉัน"
+msgstr "View My Card"
+
+#: members/templates/members/member_list.html
+msgid "สร้างสมาชิกสำเร็จ — กรุณาบันทึกรหัสผ่านนี้ (แสดงครั้งเดียวเท่านั้น):"
+msgstr "Member created successfully — Please save this password (shown once only):"
+
+#: members/templates/members/member_list.html
+msgid "รหัสผ่าน = เบอร์โทรของสมาชิก (หรือ 1234 ถ้าไม่มีเบอร์) — ส่งให้สมาชิกและให้เปลี่ยนหลังล็อกอินครั้งแรก"
+msgstr "Password = member phone number (or 1234 if no phone) — Send to member and ask to change after first login"
+
+#: members/templates/members/member_list.html
+msgid "ค้นหา ชื่อ, รหัสสมาชิก, นามสกุล..."
+msgstr "Search name, member ID, surname..."
+
+#: members/templates/members/member_list.html
+msgid "ค้นหา"
+msgstr "Search"
+
+#: members/templates/members/member_list.html
+msgid "รหัสสมาชิก"
+msgstr "Member ID"
+
+#: members/templates/members/member_list.html
+msgid "ชื่อ-นามสกุล"
+msgstr "Name"
+
+#: members/templates/members/member_list.html
+msgid "ชื่อเล่น"
+msgstr "Nickname"
+
+#: members/templates/members/member_list.html
+msgid "สถานะ"
+msgstr "Status"
+
+#: members/templates/members/member_list.html
+msgid "จัดการ"
+msgstr "Actions"
+
+#: members/templates/members/member_list.html
+msgid "บัตร"
+msgstr "Card"
+
+#: members/templates/members/member_list.html
+msgid "ดู"
+msgstr "View"
+
+#: members/templates/members/member_list.html
+msgid "แก้ไข"
+msgstr "Edit"
+
+#: members/templates/members/member_list.html
+msgid "ลบ"
+msgstr "Delete"
+
+#: members/templates/members/member_list.html
+msgid "ไม่พบสมาชิก"
+msgstr "No members found"
+
+#: members/templates/members/member_list.html
+msgid "ก่อนหน้า"
+msgstr "Previous"
+
+#: members/templates/members/member_list.html
+msgid "หน้า"
+msgstr "Page"
+
+#: members/templates/members/member_list.html
+msgid "ถัดไป"
+msgstr "Next"
+
+#: members/templates/members/add_member.html
+msgid "เพิ่มสมาชิกใหม่"
+msgstr "Add New Member"
+
+#: members/templates/members/add_member.html
+msgid "ชื่อ (ไทย)"
+msgstr "First name (Thai)"
+
+#: members/templates/members/add_member.html
+msgid "นามสกุล (ไทย)"
+msgstr "Last name (Thai)"
+
+#: members/templates/members/add_member.html
+msgid "ชื่อ (English)"
+msgstr "First name (English)"
+
+#: members/templates/members/add_member.html
+msgid "นามสกุล (English)"
+msgstr "Last name (English)"
+
+#: members/templates/members/add_member.html
+msgid "กรุ๊ปเลือด"
+msgstr "Blood group"
+
+#: members/templates/members/add_member.html
+msgid "เบอร์โทร"
+msgstr "Phone"
+
+#: members/templates/members/add_member.html
+msgid "ที่อยู่"
+msgstr "Address"
+
+#: members/templates/members/add_member.html
+msgid "บทบาท"
+msgstr "Role"
+
+#: members/templates/members/add_member.html
+msgid "วันที่สมัคร"
+msgstr "Join date"
+
+#: members/templates/members/add_member.html
+msgid "รูปแบบ: วว/ดด/ปปปป หรือใช้ปฎิทินเลือก"
+msgstr "Format: DD/MM/YYYY or use calendar"
+
+#: members/templates/members/add_member.html
+msgid "วันหมดอายุ"
+msgstr "Expiry date"
+
+#: members/templates/members/add_member.html
+msgid "รูปโปรไฟล์"
+msgstr "Profile photo"
+
+#: members/templates/members/add_member.html
+msgid "บันทึกสมาชิก"
+msgstr "Save Member"
+
+#: members/templates/members/add_member.html
+msgid "ยกเลิก"
+msgstr "Cancel"
+
+#: members/templates/members/edit_member.html
+msgid "แก้ไขสมาชิก"
+msgstr "Edit Member"
+
+#: members/templates/members/edit_member.html
+msgid "บันทึกการแก้ไข"
+msgstr "Save changes"
+
+#: members/templates/members/staff_login.html
+msgid "เข้าสู่ระบบ"
+msgstr "Log in"
+
+#: members/templates/members/staff_login.html
+msgid "ระบบจัดการสมาชิก"
+msgstr "Member management system"
+
+#: members/templates/members/staff_login.html
+msgid "ชื่อผู้ใช้"
+msgstr "Username"
+
+#: members/templates/members/staff_login.html
+msgid "Username หรือ Member ID"
+msgstr "Username or Member ID"
+
+#: members/templates/members/staff_login.html
+msgid "รหัสผ่าน"
+msgstr "Password"
+
+#: members/templates/members/staff_login.html
+msgid "ลืมรหัสผ่าน?"
+msgstr "Forgot password?"
+
+#: members/templates/members/member_detail.html
+msgid "รายละเอียด"
+msgstr "Details"
+
+#: members/templates/members/member_detail.html
+msgid "กลับไปรายชื่อสมาชิก"
+msgstr "Back to member list"
+
+#: members/templates/members/member_detail.html
+msgid "ดูบัตรสมาชิก"
+msgstr "View membership card"
+
+#: members/templates/members/member_detail.html
+msgid "แก้ไขข้อมูล"
+msgstr "Edit"
+
+#: members/templates/members/member_detail.html
+msgid "ลบสมาชิก"
+msgstr "Delete member"
+
+#: members/templates/members/delete_member.html
+msgid "ลบสมาชิก"
+msgstr "Delete member"
+
+#: members/templates/members/delete_member.html
+msgid "ยืนยันการลบสมาชิก"
+msgstr "Confirm delete member"
+
+#: members/templates/members/delete_member.html
+msgid "คุณต้องการลบสมาชิก <strong>%(name)s %(name2)s</strong> (%(mid)s) หรือไม่?"
+msgstr "Are you sure you want to delete member <strong>%(name)s %(name2)s</strong> (%(mid)s)?"
+
+#: members/templates/members/delete_member.html
+msgid "การดำเนินการนี้ไม่สามารถย้อนกลับได้"
+msgstr "This action cannot be undone"
+
+#: members/templates/members/card_unavailable.html
+msgid "บัตรสมาชิกไม่สามารถใช้งานได้"
+msgstr "Membership card is unavailable"
+
+#: members/templates/members/card_unavailable.html
+msgid "บัตรหมดอายุหรือถูกระงับการใช้งาน"
+msgstr "Card has expired or been suspended"
+
+#: members/templates/members/card_unavailable.html
+msgid "ชื่อสมาชิก"
+msgstr "Member name"
+
+#: members/templates/members/card_unavailable.html
+msgid "กรุณาติดต่อเจ้าหน้าที่เพื่อดำเนินการต่ออายุสมาชิก"
+msgstr "Please contact staff to renew membership"
+
+#: members/templates/members/member_card.html
+msgid "กลับไปหน้า Dashboard"
+msgstr "Back to Dashboard"
+
+#: members/templates/members/member_card.html
+msgid "เลือด"
+msgstr "Blood"
+
+#: members/templates/members/member_card.html
+msgid "โทร"
+msgstr "Phone"
+
+#: members/templates/members/member_card.html
+msgid "หากพบเจอบัตรนี้"
+msgstr "If you find this card"
+
+#: members/templates/members/member_card.html
+msgid "กรุณาส่งคืนได้ที่ Gun Club Thailand"
+msgstr "Please return to Gun Club Thailand"
+
+#: members/templates/members/member_card.html
+msgid "ติดต่อ"
+msgstr "Contact"
+
+#: members/templates/members/member_card.html
+msgid "บัตรนี้เป็นทรัพย์สินของ Gun Club ห้ามใช้ในทางมิชอบ"
+msgstr "This card is property of Gun Club. Do not misuse."
+
+#: members/templates/members/member_card.html
+msgid "แตะเพื่อพลิกบัตร (ด้านหน้า/ด้านหลัง)"
+msgstr "Tap to flip card (front/back)"
+
+#: members/views.py
+msgid "สร้างบัญชี Staff '%(username)s' เรียบร้อยแล้ว"
+msgstr "Staff account '%(username)s' created successfully"
+
+#: members/views.py
+msgid "กรุณาตรวจสอบข้อมูลให้ถูกต้อง"
+msgstr "Please check your input"
+
+#: members/views.py
+msgid "แก้ไขข้อมูล %(member_id)s เรียบร้อยแล้ว"
+msgstr "Updated %(member_id)s successfully"
+
+#: members/views.py
+msgid "ลบสมาชิก %(member_id)s เรียบร้อยแล้ว"
+msgstr "Deleted member %(member_id)s successfully"
+
+#: members/views.py
+msgid "ไม่มีข้อมูลสมาชิก"
+msgstr "No member data"
+
+#: members/views.py
+msgid "ไม่มีข้อมูลสมาชิก กรุณาติดต่อผู้ดูแลระบบ"
+msgstr "No member data. Please contact administrator."
+
+#: members/views.py
+msgid "บันทึกโปรไฟล์เรียบร้อยแล้ว"
+msgstr "Profile saved successfully"
+
+#: members/views.py
+msgid "เปลี่ยนรหัสผ่านเรียบร้อยแล้ว"
+msgstr "Password changed successfully"
+
+#: members/decorators.py
+msgid "คุณไม่มีสิทธิ์เข้าหน้านี้"
+msgstr "You do not have permission to access this page"
+
+#: members/templates/members/member_card.html
+msgid "บัตรสมาชิก"
+msgstr "Membership card"
+
+#: members/templates/members/edit_profile_staff.html
+msgid "แก้ไขโปรไฟล์"
+msgstr "Edit profile"
+
+#: members/templates/members/edit_profile_staff.html
+msgid "บันทึกโปรไฟล์"
+msgstr "Save profile"
+
+#: members/templates/members/staff_register.html
+msgid "สร้างบัญชี Staff"
+msgstr "Create Staff account"
+
+#: members/templates/members/staff_register.html
+msgid "ยืนยันรหัสผ่าน"
+msgstr "Confirm password"
+
+#: members/templates/members/staff_register.html
+msgid "รหัสผ่านต้องมีความยาวอย่างน้อย 8 ตัว และไม่ใช่ตัวเลขอย่างเดียว"
+msgstr "Password must be at least 8 characters and not entirely numeric"
+
+#: members/templates/members/change_password_staff.html
+msgid "อัปเดตรหัสผ่าน"
+msgstr "Update password"
+
+#: members/templates/members/member_card_expired.html
+msgid "บัตรหมดอายุ"
+msgstr "Card expired"
+
+#: members/templates/members/member_card_expired.html
+msgid "บัตรสมาชิกหมดอายุแล้ว"
+msgstr "Membership card has expired"
+
+#: members/templates/members/member_card_expired.html
+msgid "กรุณาติดต่อเจ้าหน้าที่เพื่อต่ออายุสมาชิก"
+msgstr "Please contact staff to renew membership"
+
+#: members/templates/base.html
+msgid "ไทย"
+msgstr "Thai"
+
+#: members/templates/base.html
+msgid "เมนู"
+msgstr "Menu"
+
+#: members/templates/members/staff_dashboard.html
+msgid "สมาชิกล่าสุด"
+msgstr "Recent Members"
+
+#: members/templates/members/staff_dashboard.html
+msgid "ยังไม่มีสมาชิก"
+msgstr "No members yet"
+
+#: members/templates/members/member_dashboard.html
+msgid "สแกนเพื่อดูบัตรสมาชิก"
+msgstr "Scan to view membership card"
+
+#: members/templates/members/member_card.html
+msgid "พิมพ์บัตร"
+msgstr "Print Card"
+
+#: members/templates/members/staff_dashboard.html
+msgid "Inactive"
+msgstr "Inactive"
+
+#: members/templates/members/staff_dashboard.html
+msgid "ข้อมูลของฉัน"
+msgstr "My Information"
+
+#: members/templates/members/card_print.html
+msgid "พิมพ์บัตรสมาชิก"
+msgstr "Print Membership Card"
+
+#: members/templates/members/card_print.html
+msgid "กลับ"
+msgstr "Back"
+
+#: members/templates/members/card_print.html
+msgid "ตั้งค่าเครื่องพิมพ์: ขนาดกระดาษ 85.6 x 54 mm (ID Card)"
+msgstr "Printer settings: Paper size 85.6 x 54 mm (ID Card)"
+
+#: members/templates/members/card_print.html
+msgid "ด้านหน้า"
+msgstr "Front"
+
+#: members/templates/members/card_print.html
+msgid "ด้านหลัง"
+msgstr "Back"

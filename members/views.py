@@ -15,6 +15,7 @@ from .forms import MemberForm, StaffRegisterForm
 from .models import Member
 from .utils import generate_qr_base64
 from django.utils import timezone
+from django.utils.translation import gettext as _
 
 logger = logging.getLogger(__name__)
 
@@ -66,27 +67,44 @@ def staff_dashboard(request):
     today = date.today()
 
     total = Member.objects.count()
-    active = Member.objects.filter(expire_date__gte=today).count()
+    active = Member.objects.filter(expire_date__gte=today, is_active=True).count()
     expired = Member.objects.filter(expire_date__lt=today).count()
+    inactive = Member.objects.filter(is_active=False).count()
 
     expiring_soon = Member.objects.filter(
         expire_date__gte=today,
-        expire_date__lte=today + timedelta(days=30)
+        expire_date__lte=today + timedelta(days=30),
+        is_active=True
     ).order_by("expire_date")[:5]
 
     expired_members = Member.objects.filter(
         expire_date__lt=today
     ).order_by("-expire_date")[:5]
 
-    new_members = Member.objects.order_by("-join_date")[:5]
+    recent_members = Member.objects.order_by("-id")[:5]
+
+    # Staff profile data
+    staff_member = None
+    staff_qr_image = None
+    staff_qr_fallback_url = None
+    try:
+        staff_member = Member.objects.get(user=request.user)
+        staff_qr_fallback_url = staff_member.get_card_view_only_url()
+        staff_qr_image = generate_qr_base64(staff_qr_fallback_url, size=150) or None
+    except Member.DoesNotExist:
+        pass
 
     return render(request, "members/staff_dashboard.html", {
         "total": total,
         "active": active,
         "expired": expired,
+        "inactive": inactive,
         "expiring_soon": expiring_soon,
         "expired_members": expired_members,
-        "new_members": new_members,
+        "recent_members": recent_members,
+        "staff_member": staff_member,
+        "staff_qr_image": staff_qr_image,
+        "staff_qr_fallback_url": staff_qr_fallback_url,
     })
 
 
@@ -105,7 +123,7 @@ def staff_register(request):
                 join_date=date.today(),
                 role="STAFF",
             )
-            messages.success(request, f"สร้างบัญชี Staff '{user.username}' เรียบร้อยแล้ว")
+            messages.success(request, _("สร้างบัญชี Staff '%(username)s' เรียบร้อยแล้ว") % {"username": user.username})
             return redirect("staff_dashboard")
         else:
             for field, errors in form.errors.items():
@@ -181,7 +199,7 @@ def add_member(request):
 
             return redirect("member_list")
         else:
-            messages.error(request, "กรุณาตรวจสอบข้อมูลให้ถูกต้อง")
+            messages.error(request, _("กรุณาตรวจสอบข้อมูลให้ถูกต้อง"))
     else:
         form = MemberForm(user=request.user)
 
@@ -198,7 +216,7 @@ def edit_member(request, pk):
         form = MemberForm(request.POST, request.FILES, instance=member, user=request.user)
         if form.is_valid():
             form.save()
-            messages.success(request, f"แก้ไขข้อมูล {member.member_id} เรียบร้อยแล้ว")
+            messages.success(request, _("แก้ไขข้อมูล %(member_id)s เรียบร้อยแล้ว") % {"member_id": member.member_id})
             return redirect("member_list")
     else:
         form = MemberForm(instance=member, user=request.user)
@@ -220,7 +238,7 @@ def delete_member(request, member_id):
             member.user.delete()
 
         member.delete()
-        messages.success(request, f"ลบสมาชิก {member.member_id} เรียบร้อยแล้ว")
+        messages.success(request, _("ลบสมาชิก %(member_id)s เรียบร้อยแล้ว") % {"member_id": member.member_id})
         return redirect("member_list")
 
     return render(request, "members/delete_member.html", {"member": member})
@@ -235,11 +253,16 @@ def member_dashboard(request):
     try:
         member = Member.objects.get(user=request.user)
     except Member.DoesNotExist:
-        messages.error(request, "ไม่มีข้อมูลสมาชิก")
+        messages.error(request, _("ไม่มีข้อมูลสมาชิก"))
         return redirect("staff_login")
 
+    card_url = member.get_card_view_only_url()
+    qr_image = generate_qr_base64(card_url, size=150) or None
+
     return render(request, "members/member_dashboard.html", {
-        "member": member
+        "member": member,
+        "qr_image": qr_image,
+        "qr_fallback_url": card_url,
     })
 
 
@@ -247,7 +270,7 @@ def member_dashboard(request):
 def edit_profile(request):
     member = getattr(request.user, 'member', None)
     if not member:
-        messages.error(request, "ไม่มีข้อมูลสมาชิก กรุณาติดต่อผู้ดูแลระบบ")
+        messages.error(request, _("ไม่มีข้อมูลสมาชิก กรุณาติดต่อผู้ดูแลระบบ"))
         return redirect("staff_login")
     role = member.role
 
@@ -260,7 +283,7 @@ def edit_profile(request):
         )
         if form.is_valid():
             form.save()
-            messages.success(request, "บันทึกโปรไฟล์เรียบร้อยแล้ว")
+            messages.success(request, _("บันทึกโปรไฟล์เรียบร้อยแล้ว"))
 
             # redirect ตาม role
             if role == "MEMBER":
@@ -291,7 +314,7 @@ def edit_profile(request):
 def change_password(request):
     member = getattr(request.user, 'member', None)
     if not member:
-        messages.error(request, "ไม่มีข้อมูลสมาชิก กรุณาติดต่อผู้ดูแลระบบ")
+        messages.error(request, _("ไม่มีข้อมูลสมาชิก กรุณาติดต่อผู้ดูแลระบบ"))
         return redirect("staff_login")
     is_staff_side = member.role in ["STAFF", "COMMITTEE", "PRESIDENT"]
 
@@ -300,7 +323,7 @@ def change_password(request):
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)
-            messages.success(request, "เปลี่ยนรหัสผ่านเรียบร้อยแล้ว")
+            messages.success(request, _("เปลี่ยนรหัสผ่านเรียบร้อยแล้ว"))
 
             if is_staff_side:
                 return redirect("staff_dashboard")
@@ -409,6 +432,37 @@ def member_card_expired_view_only(request, public_id):
 def my_card(request):
     member = get_object_or_404(Member, user=request.user)
     return redirect("member_card", public_id=member.public_id)
+
+
+@login_required
+def card_print(request, public_id):
+    """หน้าสำหรับพิมพ์บัตรสมาชิก - แสดงทั้งด้านหน้าและด้านหลัง"""
+    member = get_object_or_404(Member, public_id=public_id)
+
+    if not member.is_valid():
+        return render(request, "members/card_unavailable.html", {
+            "member": member,
+        })
+
+    # กำหนด URL กลับ ตาม role ของผู้ที่ login
+    try:
+        current_member = Member.objects.get(user=request.user)
+        if current_member.role in ("STAFF", "COMMITTEE", "PRESIDENT"):
+            back_url = "/staff/"
+        else:
+            back_url = "/dashboard/"
+    except Member.DoesNotExist:
+        back_url = "/staff/"
+
+    card_url = member.get_card_view_only_url()
+    qr_image = generate_qr_base64(card_url, size=100) or None
+
+    return render(request, "members/card_print.html", {
+        "member": member,
+        "qr_image": qr_image,
+        "qr_fallback_url": card_url,
+        "back_url": back_url,
+    })
 
 
 # =========================

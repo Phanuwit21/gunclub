@@ -19,6 +19,7 @@ urlpatterns = [
     # public card
     path("member/<uuid:public_id>/", views.member_card, name="member_card"),
     path("member/<uuid:public_id>/expired/", views.member_card_expired, name="member_card_expired"),
+    path("member/<uuid:public_id>/print/", views.card_print, name="card_print"),
     path("card/<uuid:public_id>/", views.member_card_view_only, name="member_card_view_only"),
     path("card/<uuid:public_id>/expired/", views.member_card_expired_view_only, name="member_card_expired_view_only"),
     path("my-card/", views.my_card, name="my_card"),

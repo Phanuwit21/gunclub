@@ -1,9 +1,10 @@
 {% extends "base_member.html" %}
-{% block title %}แก้ไขโปรไฟล์ — Gun Club{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "แก้ไขโปรไฟล์" %} — Gun Club{% endblock %}
 {% block content %}
 
 <div class="max-w-2xl">
-    <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-slate-800">แก้ไขโปรไฟล์</h1>
+    <h1 class="text-2xl sm:text-3xl font-bold mb-6 text-slate-800">{% trans "แก้ไขโปรไฟล์" %}</h1>
 
     <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 sm:p-8">
         <form method="POST" enctype="multipart/form-data" class="space-y-5">
@@ -24,7 +25,7 @@
                 {% if field.errors %}<p class="text-red-500 text-xs mt-1">{{ field.errors.0 }}</p>{% endif %}
             </div>
             {% endfor %}
-            <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-6 rounded-xl transition shadow-sm w-full sm:w-auto">บันทึกโปรไฟล์</button>
+            <button type="submit" class="bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 px-6 rounded-xl transition shadow-sm w-full sm:w-auto">{% trans "บันทึกโปรไฟล์" %}</button>
         </form>
     </div>
 </div>

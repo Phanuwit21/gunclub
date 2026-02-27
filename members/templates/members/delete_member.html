@@ -1,5 +1,6 @@
 {% extends "base.html" %}
-{% block title %}ลบสมาชิก — Gun Club{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "ลบสมาชิก" %} — Gun Club{% endblock %}
 {% block content %}
 
 <div class="max-w-md mx-auto">
@@ -9,19 +10,19 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
             </svg>
         </div>
-        <h1 class="text-xl font-bold text-slate-800 mb-2">ยืนยันการลบสมาชิก</h1>
+        <h1 class="text-xl font-bold text-slate-800 mb-2">{% trans "ยืนยันการลบสมาชิก" %}</h1>
         <p class="text-slate-600 mb-6">
-            คุณต้องการลบสมาชิก <strong>{{ member.first_name }} {{ member.last_name }}</strong> ({{ member.member_id }}) หรือไม่?
+            {% blocktrans with name=member.first_name name2=member.last_name mid=member.member_id %}คุณต้องการลบสมาชิก <strong>{{ name }} {{ name2 }}</strong> ({{ mid }}) หรือไม่?{% endblocktrans %}
         </p>
-        <p class="text-sm text-slate-500 mb-6">การดำเนินการนี้ไม่สามารถย้อนกลับได้</p>
+        <p class="text-sm text-slate-500 mb-6">{% trans "การดำเนินการนี้ไม่สามารถย้อนกลับได้" %}</p>
 
         <form method="POST" class="flex flex-col sm:flex-row gap-3 justify-center">
             {% csrf_token %}
             <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-medium px-6 py-3 rounded-xl transition active:scale-[0.98]">
-                ลบสมาชิก
+                {% trans "ลบสมาชิก" %}
             </button>
             <a href="{% url 'member_list' %}" class="bg-slate-200 hover:bg-slate-300 text-slate-800 font-medium px-6 py-3 rounded-xl transition text-center active:scale-[0.98]">
-                ยกเลิก
+                {% trans "ยกเลิก" %}
             </a>
         </form>
     </div>

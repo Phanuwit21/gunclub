@@ -1,10 +1,12 @@
+{% load i18n %}{% load static %}
 <!DOCTYPE html>
-<html lang="th">
+<html lang="{{ request.LANGUAGE_CODE|default:'th' }}">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0f172a">
-    <title>เข้าสู่ระบบ — Gun Club</title>
+    <link rel="icon" type="image/jpeg" href="{% static 'images/logo.jpg' %}">
+    <title>{% trans "เข้าสู่ระบบ" %} — Gun Club</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,19 +19,26 @@
 
 <body class="min-h-screen flex items-center justify-center p-4 login-gradient">
 
+<!-- Language Switcher -->
+<div class="absolute top-4 right-4">
+    <select onchange="switchLanguage(this.value)" class="bg-white/10 text-white text-sm rounded-lg px-3 py-1.5 border border-white/20 cursor-pointer backdrop-blur-sm">
+        <option value="th" {% if request.LANGUAGE_CODE == 'th' %}selected{% endif %} class="text-slate-900">{% trans "ไทย" %}</option>
+        <option value="en" {% if request.LANGUAGE_CODE == 'en' %}selected{% endif %} class="text-slate-900">English</option>
+    </select>
+</div>
+
 <div class="w-full max-w-sm">
     <!-- Logo & Title -->
     <div class="text-center mb-8">
-        <div class="inline-flex w-16 h-16 rounded-2xl bg-amber-500 items-center justify-center text-slate-900 text-2xl font-bold shadow-lg mb-4">
-            GC
+        <div class="inline-flex w-16 h-16 rounded-2xl bg-white/10 items-center justify-center shadow-lg mb-4 p-2">
+            <img src="{% static 'images/logo.jpg' %}" alt="Gun Club Logo" class="h-12 w-auto object-contain">
         </div>
         <h1 class="text-2xl font-bold text-white">Gun Club</h1>
-        <p class="text-slate-300 text-sm mt-1">ระบบจัดการสมาชิก</p>
+        <p class="text-slate-300 text-sm mt-1">{% trans "ระบบจัดการสมาชิก" %}</p>
     </div>
 
-    <!-- Login Card -->
     <div class="bg-white rounded-2xl shadow-2xl p-6 sm:p-8">
-        <h2 class="text-lg font-semibold text-slate-800 mb-6">เข้าสู่ระบบ</h2>
+        <h2 class="text-lg font-semibold text-slate-800 mb-6">{% trans "เข้าสู่ระบบ" %}</h2>
 
         {% if error %}
         <div class="mb-4 p-3 rounded-lg bg-red-50 text-red-700 text-sm border border-red-200">
@@ -40,26 +49,26 @@
         <form method="POST" class="space-y-4">
             {% csrf_token %}
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">ชื่อผู้ใช้</label>
-                <input type="text" name="username" placeholder="Username หรือ Member ID"
+                <label class="block text-sm font-medium text-slate-700 mb-1">{% trans "ชื่อผู้ใช้" %}</label>
+                <input type="text" name="username" placeholder="{% trans 'Username หรือ Member ID' %}"
                        class="w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
                        required autocomplete="username">
             </div>
             <div>
-                <label class="block text-sm font-medium text-slate-700 mb-1">รหัสผ่าน</label>
+                <label class="block text-sm font-medium text-slate-700 mb-1">{% trans "รหัสผ่าน" %}</label>
                 <input type="password" name="password" placeholder="••••••••"
                        class="w-full border border-slate-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition"
                        required autocomplete="current-password">
             </div>
             <button type="submit"
                     class="w-full bg-amber-600 hover:bg-amber-700 text-white font-medium py-3 rounded-lg transition shadow-sm active:scale-[0.98]">
-                เข้าสู่ระบบ
+                {% trans "เข้าสู่ระบบ" %}
             </button>
         </form>
 
         <p class="mt-6 text-center">
             <a href="{% url 'password_reset' %}" class="text-sm text-amber-600 hover:text-amber-700 hover:underline">
-                ลืมรหัสผ่าน?
+                {% trans "ลืมรหัสผ่าน?" %}
             </a>
         </p>
     </div>
@@ -69,5 +78,18 @@
     </p>
 </div>
 
+<script>
+function switchLanguage(lang) {
+    const currentPath = window.location.pathname;
+    const langPattern = /^\/(th|en)\//;
+    let newPath;
+    if (langPattern.test(currentPath)) {
+        newPath = currentPath.replace(langPattern, '/' + lang + '/');
+    } else {
+        newPath = '/' + lang + currentPath;
+    }
+    window.location.href = newPath + window.location.search;
+}
+</script>
 </body>
 </html>

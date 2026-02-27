@@ -1,37 +1,112 @@
 {% extends "base.html" %}
-{% block title %}แดชบอร์ด — Gun Club{% endblock %}
+{% load i18n %}{% load static %}
+{% block title %}{% trans "แดชบอร์ด" %} — Gun Club{% endblock %}
 {% block content %}
 
-<h1 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-slate-800">📊 แดชบอร์ด</h1>
+<h1 class="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8 text-slate-800">📊 {% trans "แดชบอร์ด" %}</h1>
+
+<!-- Staff Profile Card -->
+{% if staff_member %}
+<div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-5 sm:p-6 mb-8">
+    <h2 class="text-lg font-bold text-slate-800 mb-4">👤 {% trans "ข้อมูลของฉัน" %}</h2>
+    <div class="flex flex-col lg:flex-row gap-6">
+        <!-- Profile Info -->
+        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 flex-1">
+            {% if staff_member.photo %}
+                <img src="{{ staff_member.photo.url }}"
+                     class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl object-cover shadow-md flex-shrink-0">
+            {% else %}
+                <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-slate-200 flex items-center justify-center text-slate-500 text-2xl font-bold flex-shrink-0">
+                    {{ staff_member.first_name|slice:":1" }}{{ staff_member.last_name|slice:":1" }}
+                </div>
+            {% endif %}
+
+            <div class="flex-1 text-center sm:text-left">
+                <div class="text-xl sm:text-2xl font-bold text-slate-800">
+                    {{ staff_member.first_name }} {{ staff_member.last_name }}
+                </div>
+                <div class="text-slate-500 mt-1 font-mono">{{ staff_member.member_id }}</div>
+                <div class="flex flex-wrap justify-center sm:justify-start gap-2 mt-2">
+                    <span class="inline-flex px-3 py-1 rounded-full text-sm font-medium bg-amber-100 text-amber-700">
+                        {{ staff_member.get_role_display }}
+                    </span>
+                    <span class="inline-flex px-3 py-1 rounded-full text-sm font-medium bg-slate-200 text-slate-700">
+                        {{ staff_member.status }}
+                    </span>
+                </div>
+                {% if staff_member.expire_date %}
+                <div class="text-sm text-slate-500 mt-2">{% trans "หมดอายุ" %}: {{ staff_member.expire_date }}</div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- QR Code -->
+        <div class="flex flex-col items-center justify-center bg-slate-50 rounded-xl p-4">
+            <div class="bg-white p-2 rounded-xl shadow-inner border border-slate-200">
+                {% if staff_qr_image %}
+                    <img src="{{ staff_qr_image }}" alt="QR Code" class="w-32 h-32">
+                {% else %}
+                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={{ staff_qr_fallback_url|urlencode }}"
+                         alt="QR Code" class="w-32 h-32">
+                {% endif %}
+            </div>
+            <p class="mt-2 text-xs text-slate-500 text-center">{% trans "สแกนเพื่อดูบัตรสมาชิก" %}</p>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="mt-5 flex flex-col sm:flex-row gap-3">
+        <a href="{% url 'my_card' %}"
+           class="flex-1 sm:flex-initial bg-amber-600 hover:bg-amber-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm text-center transition active:scale-[0.98]">
+            {% trans "ดูบัตรของฉัน" %}
+        </a>
+        <a href="{% url 'card_print' staff_member.public_id %}"
+           class="flex-1 sm:flex-initial inline-flex items-center justify-center gap-2 bg-slate-700 hover:bg-slate-800 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm text-center transition active:scale-[0.98]">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"/>
+            </svg>
+            {% trans "พิมพ์บัตร" %}
+        </a>
+        <a href="{% url 'edit_profile' %}"
+           class="flex-1 sm:flex-initial bg-slate-600 hover:bg-slate-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-sm text-center transition active:scale-[0.98]">
+            {% trans "แก้ไขโปรไฟล์" %}
+        </a>
+    </div>
+</div>
+{% endif %}
 
 <!-- Summary Cards -->
-<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8 sm:mb-10">
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mb-8 sm:mb-10">
     <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100">
-        <div class="text-slate-500 text-sm font-medium">สมาชิกทั้งหมด</div>
+        <div class="text-slate-500 text-sm font-medium">{% trans "สมาชิกทั้งหมด" %}</div>
         <div class="text-2xl sm:text-3xl font-bold mt-2 text-slate-800">{{ total }}</div>
-        <div class="text-xs text-slate-400 mt-1">คน</div>
+        <div class="text-xs text-slate-400 mt-1">{% trans "คน" %}</div>
     </div>
-    <div class="bg-emerald-50 p-5 sm:p-6 rounded-2xl shadow-sm border border-emerald-100">
-        <div class="text-emerald-700 text-sm font-medium">สถานะ Active</div>
-        <div class="text-2xl sm:text-3xl font-bold mt-2 text-emerald-600">{{ active }}</div>
-        <div class="text-xs text-emerald-500 mt-1">คน</div>
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100">
+        <div class="text-slate-600 text-sm font-medium">{% trans "สถานะ Active" %}</div>
+        <div class="text-2xl sm:text-3xl font-bold mt-2 text-slate-700">{{ active }}</div>
+        <div class="text-xs text-slate-400 mt-1">{% trans "คน" %}</div>
     </div>
-    <div class="bg-red-50 p-5 sm:p-6 rounded-2xl shadow-sm border border-red-100">
-        <div class="text-red-700 text-sm font-medium">หมดอายุแล้ว</div>
-        <div class="text-2xl sm:text-3xl font-bold mt-2 text-red-600">{{ expired }}</div>
-        <div class="text-xs text-red-500 mt-1">คน</div>
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100">
+        <div class="text-slate-600 text-sm font-medium">{% trans "หมดอายุแล้ว" %}</div>
+        <div class="text-2xl sm:text-3xl font-bold mt-2 text-slate-700">{{ expired }}</div>
+        <div class="text-xs text-slate-400 mt-1">{% trans "คน" %}</div>
+    </div>
+    <div class="bg-white p-5 sm:p-6 rounded-2xl shadow-sm border border-slate-100">
+        <div class="text-slate-600 text-sm font-medium">{% trans "Inactive" %}</div>
+        <div class="text-2xl sm:text-3xl font-bold mt-2 text-slate-700">{{ inactive }}</div>
+        <div class="text-xs text-slate-400 mt-1">{% trans "คน" %}</div>
     </div>
 </div>
 
 <!-- Notifications -->
-<h2 class="text-lg sm:text-xl font-bold mb-4 text-slate-800">🔔 แจ้งเตือน</h2>
+<h2 class="text-lg sm:text-xl font-bold mb-4 text-slate-800">🔔 {% trans "แจ้งเตือน" %}</h2>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-    <!-- Expiring Soon -->
     <div class="bg-amber-50 p-5 rounded-2xl shadow-sm border border-amber-100">
         <h3 class="font-semibold text-amber-800 mb-3 flex items-center gap-2">
             <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
-            ใกล้หมดอายุ (30 วัน)
+            {% trans "ใกล้หมดอายุ (30 วัน)" %}
         </h3>
         {% if expiring_soon %}
             <ul class="space-y-3 text-sm">
@@ -46,13 +121,12 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-sm text-slate-500">ไม่มีสมาชิกใกล้หมดอายุ</p>
+            <p class="text-sm text-slate-500">{% trans "ไม่มีสมาชิกใกล้หมดอายุ" %}</p>
         {% endif %}
     </div>
 
-    <!-- Expired -->
     <div class="bg-red-50 p-5 rounded-2xl shadow-sm border border-red-100">
-        <h3 class="font-semibold text-red-800 mb-3">หมดอายุแล้ว</h3>
+        <h3 class="font-semibold text-red-800 mb-3">{% trans "หมดอายุแล้ว" %}</h3>
         {% if expired_members %}
             <ul class="space-y-3 text-sm">
                 {% for m in expired_members %}
@@ -63,16 +137,15 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-sm text-slate-500">ไม่มีสมาชิกหมดอายุ</p>
+            <p class="text-sm text-slate-500">{% trans "ไม่มีสมาชิกหมดอายุ" %}</p>
         {% endif %}
     </div>
 
-    <!-- New Members -->
-    <div class="bg-blue-50 p-5 rounded-2xl shadow-sm border border-blue-100">
-        <h3 class="font-semibold text-blue-800 mb-3">สมาชิกใหม่</h3>
-        {% if new_members %}
+    <div class="bg-slate-50 p-5 rounded-2xl shadow-sm border border-slate-200">
+        <h3 class="font-semibold text-slate-700 mb-3">{% trans "สมาชิกล่าสุด" %}</h3>
+        {% if recent_members %}
             <ul class="space-y-3 text-sm">
-                {% for m in new_members %}
+                {% for m in recent_members|slice:":5" %}
                     <li class="bg-white/60 rounded-lg p-3">
                         <span class="font-mono font-medium text-slate-800">{{ m.member_id }}</span>
                         <span class="block text-slate-500 text-xs">{{ m.first_name }} {{ m.last_name }}</span>
@@ -80,8 +153,51 @@
                 {% endfor %}
             </ul>
         {% else %}
-            <p class="text-sm text-slate-500">ยังไม่มีสมาชิกใหม่</p>
+            <p class="text-sm text-slate-500">{% trans "ยังไม่มีสมาชิก" %}</p>
         {% endif %}
+    </div>
+</div>
+
+<!-- Recent Members Table -->
+<h2 class="text-lg sm:text-xl font-bold mb-4 mt-8 text-slate-800">👥 {% trans "สมาชิกล่าสุด" %}</h2>
+<div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full">
+            <thead class="bg-slate-50 border-b border-slate-200">
+                <tr>
+                    <th class="text-left p-4 text-sm font-semibold text-slate-600">{% trans "รหัสสมาชิก" %}</th>
+                    <th class="text-left p-4 text-sm font-semibold text-slate-600">{% trans "ชื่อ-นามสกุล" %}</th>
+                    <th class="text-left p-4 text-sm font-semibold text-slate-600 hidden sm:table-cell">{% trans "วันที่สมัคร" %}</th>
+                    <th class="text-left p-4 text-sm font-semibold text-slate-600">{% trans "สถานะ" %}</th>
+                    <th class="text-right p-4 text-sm font-semibold text-slate-600">{% trans "จัดการ" %}</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for m in recent_members %}
+                <tr class="hover:bg-slate-50 transition">
+                    <td class="p-4 font-mono font-medium text-amber-600">{{ m.member_id }}</td>
+                    <td class="p-4">
+                        <div class="font-medium text-slate-800">{{ m.first_name }} {{ m.last_name }}</div>
+                        <div class="text-xs text-slate-500">{{ m.nickname|default:"—" }}</div>
+                    </td>
+                    <td class="p-4 text-slate-600 hidden sm:table-cell">{{ m.join_date }}</td>
+                    <td class="p-4">
+                        <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-slate-200 text-slate-700">
+                            {{ m.status }}
+                        </span>
+                    </td>
+                    <td class="p-4 text-right">
+                        <a href="{% url 'member_detail' m.member_id %}" class="text-slate-600 hover:text-slate-800 font-medium text-sm mr-2">{% trans "ดู" %}</a>
+                        <a href="{% url 'edit_member' m.pk %}" class="text-blue-600 hover:text-blue-700 font-medium text-sm">{% trans "แก้ไข" %}</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="p-8 text-center text-slate-500">{% trans "ยังไม่มีสมาชิก" %}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
 </div>
 

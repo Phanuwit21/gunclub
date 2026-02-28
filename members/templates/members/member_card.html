@@ -87,7 +87,7 @@
                 <div class="flex items-center gap-2">
                     <img src="{% static 'images/logo.jpg' %}" alt="Logo" class="h-6 w-auto rounded">
                     <span class="font-semibold tracking-wide text-[11px] text-white">
-                        GUN CLUB MEMBERSHIP
+                        CHAING MAI IPSC SHOOTING CLUB MEMBERSHIP
                     </span>
                 </div>
                 <span class="px-2 py-0.5 rounded-full text-[10px] font-semibold bg-slate-600 text-white">
@@ -152,6 +152,10 @@
                         <div>
                             {% trans "หมดอายุ" %}: {{ member.expire_date }}
                         </div>
+
+                        <div>
+                            {% trans "ที่อยู่" %}: {{ member.address|default:"—" }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -162,7 +166,7 @@
 
             <div class="text-center text-[11px]">
                 <div class="font-semibold text-sm">
-                    Gun Club Membership Card
+                    CHAING MAI IPSC SHOOTING CLUB Membership Card
                 </div>
 
                 <div class="text-[10px] text-slate-300 mt-1">

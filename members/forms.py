@@ -20,8 +20,8 @@ class MemberForm(forms.ModelForm):
     class Meta:
         model = Member
         widgets = {
-            "join_date": forms.DateInput(attrs={"type": "date"}),
-            "expire_date": forms.DateInput(attrs={"type": "date"}),
+            "join_date": forms.DateInput(attrs={"type": "date"},format="%Y-%m-%d"),
+            "expire_date": forms.DateInput(attrs={"type": "date"},format="%Y-%m-%d"),
         }
         fields = [
             "first_name",
@@ -30,6 +30,9 @@ class MemberForm(forms.ModelForm):
             "last_name_en",
             "nickname",
             "phone",
+            "email",
+            "emergency_contact_name",
+            "emergency_contact_phone",
             "blood_group",
             "address",
             "photo",
@@ -41,6 +44,10 @@ class MemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         user = kwargs.pop("user", None)
         super().__init__(*args, **kwargs)
+
+        # บังคับ format ให้โชว์ถูก
+        self.fields["join_date"].input_formats = ["%Y-%m-%d"]
+        self.fields["expire_date"].input_formats = ["%Y-%m-%d"]
 
         # default: field ทุกตัวแก้ได้
         role = None

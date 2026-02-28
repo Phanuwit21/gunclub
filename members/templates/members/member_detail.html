@@ -39,16 +39,20 @@
             <div><span class="text-slate-500 text-sm">{% trans "กรุ๊ปเลือด" %}</span><p class="font-medium">{{ member.blood_group|default:"—" }}</p></div>
             <div><span class="text-slate-500 text-sm">{% trans "วันที่สมัคร" %}</span><p class="font-medium">{{ member.join_date }}</p></div>
             <div><span class="text-slate-500 text-sm">{% trans "วันหมดอายุ" %}</span><p class="font-medium">{{ member.expire_date|default:"—" }}</p></div>
+            <div><span class="text-slate-500 text-sm">{% trans "ที่อยู่" %}</span><p class="font-medium">{{ member.address|default:"—" }}</p></div>
+            <div><span class="text-slate-500 text-sm">{% trans "อีเมล" %}</span><p class="font-medium">{{ member.email|default:"—" }}</p></div>
+            <div><span class="text-slate-500 text-sm">{% trans "ชื่อผู้ติดต่อฉุกเฉิน" %}</span><p class="font-medium">{{ member.emergency_contact_name|default:"—" }}</p></div>
+            <div><span class="text-slate-500 text-sm">{% trans "เบอร์โทรผู้ติดต่อฉุกเฉิน" %}</span><p class="font-medium">{{ member.emergency_contact_phone|default:"—" }}</p></div>
         </div>
 
         <div class="border-t border-slate-100 p-5 sm:p-6 flex flex-col sm:flex-row gap-3">
-            <a href="{% url 'member_card' member.public_id %}" class="btn-primary py-3 px-6 text-center">
+            <a href="{% url 'member_card' member.public_id %}" class="btn-primary py-3 px-6 rounded-lg text-center bg-amber-600 hover:bg-amber-700 text-white">
                 {% trans "ดูบัตรสมาชิก" %}
             </a>
-            <a href="{% url 'edit_member' member.pk %}" class="btn-secondary py-3 px-6 rounded-lg text-center">
+            <a href="{% url 'edit_member' member.pk %}" class="btn-secondary py-3 px-6 rounded-lg text-center bg-slate-600 hover:bg-slate-700 text-white">
                 {% trans "แก้ไขข้อมูล" %}
             </a>
-            <a href="{% url 'delete_member' member.member_id %}" class="text-red-600 hover:text-red-700 font-medium py-3 px-6 text-center">
+            <a href="{% url 'delete_member' member.member_id %}" class="text-red-600 hover:text-red-700 font-medium py-3 px-6 rounded-lg text-center bg-red-600 hover:bg-red-700 text-white">
                 {% trans "ลบสมาชิก" %}
             </a>
         </div>

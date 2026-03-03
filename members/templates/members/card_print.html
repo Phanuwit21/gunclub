@@ -251,7 +251,7 @@
                 <div class="card-header">
                     <div class="card-header-left">
                         <img src="{% static 'images/logo.jpg' %}" alt="Logo" class="card-logo">
-                        <span class="card-title">GUN CLUB MEMBERSHIP</span>
+                        <span class="card-title">CHAING MAI IPSC SHOOTING CLUB MEMBERCARD</span>
                     </div>
                     <span class="card-role">{{ member.get_role_display }}</span>
                 </div>
@@ -269,10 +269,11 @@
                         <div class="card-nickname">{% trans "ชื่อเล่น" %}: {{ member.nickname|default:"—" }}</div>
                         <div class="card-id">ID: {{ member.member_id }}</div>
                         <div class="card-details">
-                            <div>{% trans "สถานะ" %}: <strong>{{ member.status }}</strong></div>
-                            <div>{% trans "กรุ๊ปเลือด" %}: {{ member.blood_group|default:"—" }}</div>
-                            <div>{% trans "โทร" %}: {{ member.phone|default:"—" }}</div>
-                            <div>{% trans "หมดอายุ" %}: {{ member.expire_date }}</div>
+                            <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">{% trans "โทร" %}: {{ member.phone|default:"—" }}</div>
+                            <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">{% trans "กรุ๊ปเลือด" %}: {{ member.blood_group|default:"—" }}</div>
+                            <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">{% trans "วันที่สมัคร" %}: {{ member.join_date }}</div>
+                            <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">{% trans "วันหมดอายุ" %}: {{ member.expire_date }}</div>
+                            <div class="mt-1 grid grid-cols-2 gap-x-2 gap-y-0.5">{% trans "ที่อยู่" %}: {{ member.address|default:"—" }}</div>
                         </div>
                     </div>
                 </div>
@@ -288,10 +289,10 @@
             <div class="card card-back">
 
                 <div class="back-top">
-                    <div class="back-title">Gun Club Membership Card</div>
+                    <div class="back-title">CHAING MAI IPSC SHOOTING CLUB MEMBERCARD</div>
                     <div class="back-sub">{% trans "หากพบเจอบัตรนี้" %}</div>
-                    <div class="back-return">{% trans "กรุณาส่งคืนได้ที่ Gun Club Thailand" %}</div>
-                    <div class="back-phone">{% trans "ติดต่อ" %}: {{ member.phone|default:"—" }}</div>
+                    <div class="back-return">{% trans "กรุณาส่งคืนได้ที่ ชมรมกีฬายิงปืนรณยุทธจังหวัดเชียงใหม่" %}</div>
+                    <div class="back-phone">{% trans "ติดต่อ" %}: 0840403411</div>
                 </div>
 
                 <div class="back-qr">
@@ -302,7 +303,7 @@
                     {% endif %}
                 </div>
 
-                <div class="back-footer">{% trans "บัตรนี้เป็นทรัพย์สินของ Gun Club ห้ามใช้ในทางมิชอบ" %}</div>
+                <div class="back-footer">{% trans "บัตรนี้เป็นทรัพย์สินของ CHAING MAI IPSC SHOOTING CLUB ห้ามใช้ในทางมิชอบ" %}</div>
 
             </div>
         </div>
@@ -322,7 +323,7 @@
         <div class="card-header">
             <div class="card-header-left">
                 <img src="{% static 'images/logo.jpg' %}" alt="Logo" class="card-logo">
-                <span class="card-title">GUN CLUB MEMBERSHIP</span>
+                <span class="card-title">CHAING MAI IPSC SHOOTING CLUB MEMBERCARD</span>
             </div>
             <span class="card-role">{{ member.get_role_display }}</span>
         </div>
@@ -340,10 +341,12 @@
                 <div class="card-nickname">{% trans "ชื่อเล่น" %}: {{ member.nickname|default:"—" }}</div>
                 <div class="card-id">ID: {{ member.member_id }}</div>
                 <div class="card-details">
-                    <div>{% trans "สถานะ" %}: <strong>{{ member.status }}</strong></div>
+                    <div>{% trans "โทร" %}: {{ member.phone|default:"—" }}</div>
                     <div>{% trans "กรุ๊ปเลือด" %}: {{ member.blood_group|default:"—" }}</div>
                     <div>{% trans "โทร" %}: {{ member.phone|default:"—" }}</div>
-                    <div>{% trans "หมดอายุ" %}: {{ member.expire_date }}</div>
+                    <div>{% trans "วันที่สมัคร" %}: {{ member.join_date }}</div>
+                    <div>{% trans "วันหมดอายุ" %}: {{ member.expire_date }}</div>
+                    <div>{% trans "ที่อยู่" %}: {{ member.address|default:"—" }}</div>
                 </div>
             </div>
         </div>
@@ -354,10 +357,10 @@
     <div class="card card-back">
 
         <div class="back-top">
-            <div class="back-title">Gun Club Membership Card</div>
+            <div class="back-title">CHAING MAI IPSC SHOOTING CLUB MEMBERCARD</div>
             <div class="back-sub">{% trans "หากพบเจอบัตรนี้" %}</div>
-            <div class="back-return">{% trans "กรุณาส่งคืนได้ที่ Gun Club Thailand" %}</div>
-            <div class="back-phone">{% trans "ติดต่อ" %}: {{ member.phone|default:"—" }}</div>
+            <div class="back-return">{% trans "กรุณาส่งคืนได้ที่ ชมรมกีฬายิงปืนรณยุทธจังหวัดเชียงใหม่" %}</div>
+            <div class="back-phone">{% trans "ติดต่อ" %}: 0840403411</div>
         </div>
 
         <div class="back-qr">
@@ -368,7 +371,7 @@
             {% endif %}
         </div>
 
-        <div class="back-footer">{% trans "บัตรนี้เป็นทรัพย์สินของ Gun Club ห้ามใช้ในทางมิชอบ" %}</div>
+        <div class="back-footer">{% trans "บัตรนี้เป็นทรัพย์สินของ CHAING MAI IPSC SHOOTING CLUB ห้ามใช้ในทางมิชอบ" %}</div>
 
     </div>
 
